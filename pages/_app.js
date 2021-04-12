@@ -41,8 +41,7 @@ const MyApp = ({ Component, pageProps }) => {
   const paletteType = darkState ? 'dark' : 'light';
   const primary = darkState ? '#b2ebf2' : '#00838f';
   const secondary = darkState ? '#ffcc80' : '#ef6c00';
-  const backgorund = darkState ? '#303030' : '#fafafa';
-
+  
   const theme = createMuiTheme({
     palette: {
       type: paletteType,
@@ -51,9 +50,6 @@ const MyApp = ({ Component, pageProps }) => {
       },
       secondary: {
         main: secondary
-      },
-      background: {
-        default: backgorund
       }
     }
   });

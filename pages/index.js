@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/client';
 import { useTheme } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Navigation from '../components/navigation';
@@ -44,16 +45,14 @@ const Index = () => {
         </Backdrop>
       )}
       {session && filtered && (
-        <Grid container direction="column" style={{ paddingTop: theme.mixins.toolbar.minHeight + 10 }} >
+        <Grid container direction="column" style={{ paddingTop: theme.mixins.toolbar.minHeight + 10, height: '100vh' }} >
           <Grid container direction="row" >
             {filtered.map(record => (
               <RecordCard key={record._id} record={record}></RecordCard>
             ))}
           </Grid>
-          <Grid item>
-            <div style={{ height: 100 }} />
-          </Grid>
-           {navigator.maxTouchPoints == 0 && (
+          <Grid item component="div" style={{ height: 100 }} />
+          {navigator.maxTouchPoints == 0 && (
             <AppBar fixed="true" style={{ top: 'auto', bottom: 0 }}>
               <TraveTypeFieldset value={filter} handleChange={handleFilter} />
             </AppBar>
