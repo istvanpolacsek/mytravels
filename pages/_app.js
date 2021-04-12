@@ -41,7 +41,7 @@ const MyApp = ({ Component, pageProps }) => {
   const paletteType = darkState ? 'dark' : 'light';
   const primary = darkState ? '#b2ebf2' : '#00838f';
   const secondary = darkState ? '#ffcc80' : '#ef6c00';
-  
+
   const theme = createMuiTheme({
     palette: {
       type: paletteType,
@@ -76,6 +76,9 @@ const MyApp = ({ Component, pageProps }) => {
                 <Head>
                   <title>My Travels</title>
                   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+                  <meta name="apple-mobile-web-app-capable" content="yes" />
+                  <meta name="apple-mobile-web-app-title" content="My Travels" />
+                  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
                 </Head>
                 <CssBaseline />
                 <Component {...pageProps} />

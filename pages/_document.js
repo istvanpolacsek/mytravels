@@ -13,9 +13,6 @@ export default class MyDocument extends Document {
           <meta name="application-name" content="My Travels" />
           <meta name="msapplication-starturl" content="/" />
           <meta name="msapplication-navbutton-color" content="#00838f" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-title" content="My Travels" />
-          <meta name="apple-mobile-web-app-status-bar-style" content="black" />
           <link rel="icon" type="image/svg+xml" href="/logo.svg" />
           <link rel="icon" type="image/png" sizes="192x192" href="android-icon-192x192.png" />
           <link rel="apple-touch-icon" type="image/png" sizes="57x57" href="apple-icon-57x57.png" />
