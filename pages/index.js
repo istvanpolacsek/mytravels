@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/client';
 import { useTheme } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Navigation from '../components/navigation';
@@ -11,6 +10,7 @@ import RecordCard from '../components/recordcard';
 import TraveTypeFieldset from '../components/traveltypefieldset';
 import { useQuery } from 'react-query';
 import { AppBar } from '@material-ui/core';
+import Head from 'next/head';
 
 const Index = () => {
   const [session] = useSession();
@@ -37,6 +37,11 @@ const Index = () => {
 
   return (
     <Grid>
+      <Head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="My Travels" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+      </Head>
       <Navigation />
       <SignIn />
       {isFetching && (
