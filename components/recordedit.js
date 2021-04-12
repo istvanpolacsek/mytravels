@@ -15,6 +15,7 @@ import RecordEditSchema from '../models/yup/recordedit';
 import FormikDatePicker from './formikdatepicker';
 import FormikTypePicker from './formiktypepicker';
 import { useMutation, useQueryClient } from 'react-query';
+import fetch from 'isomorphic-unfetch';
 
 const appurl = process.env.NEXT_PUBLIC_URL;
 

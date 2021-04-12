@@ -19,6 +19,7 @@
     "fontsource-roboto": "^4.0.0",
     "formik": "^2.2.6",
     "haversine-distance": "^1.2.1",
+    "isomorphic-unfetch": "^3.1.0",
     "lodash": "^4.17.21",
     "mongodb": "^3.6.5",
     "mongoose": "^5.12.2",
@@ -35,5 +36,7 @@
     "mongodb": "^3.6.5",
     "mongoose": "^5.12.2"
   },
-  "cacheDirectories" : [".next/cache"]
+  "cacheDirectories": [
+    ".next/cache"
+  ]
 }

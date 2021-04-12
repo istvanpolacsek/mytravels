@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { useMutation, useQueryClient } from 'react-query';
+import fetch from 'isomorphic-unfetch';
 
 const appurl = process.env.NEXT_PUBLIC_URL;
 
