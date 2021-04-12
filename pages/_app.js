@@ -10,7 +10,6 @@ import enGBLocale from 'date-fns/locale/en-GB';
 import { StateProvider } from '../utils/statecontext';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
-import fetch from 'isomorphic-unfetch';
 
 const appurl = process.env.NEXT_PUBLIC_URL;
 

@@ -18,7 +18,6 @@ import FormikPlacesAutocomplete from './formikplacesautocomplete';
 import FormikTypePicker from './formiktypepicker';
 import withWidth from '@material-ui/core/withWidth';
 import { useMutation, useQueryClient } from 'react-query';
-import fetch from 'isomorphic-unfetch';
 
 const appurl = process.env.NEXT_PUBLIC_URL;
 

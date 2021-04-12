@@ -56,6 +56,7 @@ export default async (req, res) => {
             .photo_reference
         };
         const newrecord = await TravelRecord.create(record);
+        
         if (!newrecord) {
           res.status(400).json({ success: false });
         }
