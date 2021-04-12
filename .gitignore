@@ -37,6 +37,7 @@ yarn-error.log*
 # pwa
 /public/sw.js
 /public/sw.js.map
+/public/workbox*
 
 # misc
 /pages/api/dbtest.js
