@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
+/.env.local
 .pnp.js
 
 # testing
@@ -32,3 +33,13 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# pwa
+/public/sw.js
+/public/sw.js.map
+
+# misc
+/pages/api/dbtest.js
+/public/*.pdn
+/.vscode/
+/misc/*.*
