@@ -87,7 +87,7 @@ const RecordNew = ({ userid, style, width }) => {
             }) => (
               <Grid component="form" container direction="column" onSubmit={handleSubmit} noValidate  >
                 <Grid container direction="row" justify="space-between" >
-                  <Box m={1} maxWidth="100%" width={width === "xs" ? '100%' : '49%'} style={{ marginInline: 0 }} >
+                  <Box m={1} maxWidth="100%" width={width === "xs" ? '100%' : '48%'} style={{ marginLeft: 0, marginRight: 0 }} >
                     <FormikDatePicker
                       name="traveldate"
                       label={errors.traveldate ? `Date | ${errors.traveldate}` : "Date"}
@@ -95,7 +95,7 @@ const RecordNew = ({ userid, style, width }) => {
                       disabled={isLoading}
                     />
                   </Box>
-                  <Box m={1} maxWidth="100%" width={width === "xs" ? '100%' : '49%'} style={{ marginInline: 0 }}>
+                  <Box m={1} maxWidth="100%" width={width === "xs" ? '100%' : '48%'} style={{ marginLeft: 0, marginRight: 0 }}>
                     <FormikTypePicker
                       name="traveltype"
                       label={errors.traveltype ? `Type | ${errors.traveltype}` : "Type"}
@@ -104,7 +104,7 @@ const RecordNew = ({ userid, style, width }) => {
                     />
                   </Box>
                 </Grid>
-                <Box m={1} width="100%" style={{ marginInline: 0 }} >
+                <Box m={1} width="100%" style={{ marginLeft: 0, marginRight: 0 }} >
                   <FormikPlacesAutocomplete
                     name="departureid"
                     label="Departure"
@@ -112,7 +112,7 @@ const RecordNew = ({ userid, style, width }) => {
                     disabled={isLoading}
                   />
                 </Box>
-                <Box m={1} width="100%" style={{ marginInline: 0 }}>
+                <Box m={1} width="100%" style={{ marginLeft: 0, marginRight: 0 }}>
                   <FormikPlacesAutocomplete
                     name="arrivalid"
                     label="Arrival"
