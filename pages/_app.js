@@ -10,6 +10,7 @@ import enGBLocale from 'date-fns/locale/en-GB';
 import { StateProvider } from '../utils/statecontext';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
+import Navigation from '../components/navigation';
 
 const appurl = process.env.NEXT_PUBLIC_URL;
 
@@ -62,7 +63,7 @@ const MyApp = ({ Component, pageProps }) => {
     setState({
       ...state,
       darkState: localStorage.getItem('darkState') == 'on' ? true : false,
-      records: []
+      mobile: navigator.maxTouchPoints > 0
     });
   }, []);
 
@@ -81,6 +82,7 @@ const MyApp = ({ Component, pageProps }) => {
                   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
                 </Head>
                 <CssBaseline />
+                <Navigation />
                 <Component {...pageProps} />
               </StateProvider>
             </AuthProvider>

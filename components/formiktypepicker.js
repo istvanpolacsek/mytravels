@@ -1,51 +1,38 @@
 import { Fragment } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { useField, useFormikContext } from 'formik';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 import { TravelTypes } from '../utils/traveltypes';
-
-const values = [];
-
-TravelTypes.map(option => {
-  values.push(option.displayName);
-});
 
 const FormikTypePicker = ({ label, error, disabled, ...props }) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
 
+  const handleChange = (event) => {
+    setFieldValue(field.name, event.target.value)
+  }
+
   return (
     <Fragment>
-      <Autocomplete
-        options={values}
-        value={field.value || null}
+      <TextField
+        variant="outlined"
+        fullWidth
+        select
+        label={label}
+        error={error}
+        value={field.value || ''}
+        onChange={handleChange}
         disabled={disabled}
-        onChange={(event, value) => {
-          setFieldValue(field.name, value)
-        }}
-        renderOption={(value) => (
-          <Fragment>
-            <ListItemIcon>
-              {TravelTypes[TravelTypes.findIndex(e => e.displayName === value)].icon}
-            </ListItemIcon>
-            <ListItemText primary={value} />
-          </Fragment>
-        )}
-        renderInput={(params) => (
-          <TextField 
-            {...params}
-            fullWidth
-            variant="outlined"
-            label={label} 
-            error={!!error}
-            placeholder="Plane..."
-          />
-        )
-
-        }
-      />
+      >
+        {TravelTypes.map(type => (
+          <MenuItem value={type.displayName} key={type.type}>
+            <Typography variant="inherit">
+              {type.displayName}
+            </Typography>
+          </MenuItem>
+        ))}
+      </TextField>
     </Fragment>
   );
 }

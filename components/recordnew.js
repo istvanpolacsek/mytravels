@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import { Formik } from 'formik';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -18,6 +18,7 @@ import FormikPlacesAutocomplete from './formikplacesautocomplete';
 import FormikTypePicker from './formiktypepicker';
 import withWidth from '@material-ui/core/withWidth';
 import { useMutation, useQueryClient } from 'react-query';
+import StateContext from '../utils/statecontext';
 
 const appurl = process.env.NEXT_PUBLIC_URL;
 
@@ -43,6 +44,8 @@ const RecordNew = ({ userid, style, width }) => {
       queryClient.refetchQueries(userid);
     }
   });
+
+  const { state: { mobile } } = useContext(StateContext);
 
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ userid: userid });
@@ -71,7 +74,7 @@ const RecordNew = ({ userid, style, width }) => {
           <Add fontSize="large" />
         </Fab>
       </Tooltip>
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth >
+      <Dialog fullScreen={mobile} open={open} onClose={handleClose} maxWidth="md" fullWidth >
         <DialogTitle>
           New Travel Record
         </DialogTitle>
