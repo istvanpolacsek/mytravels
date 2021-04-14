@@ -8,7 +8,7 @@ import SignIn from '../components/signin';
 import RecordCard from '../components/recordcard';
 import TraveTypeFieldset from '../components/traveltypefieldset';
 import { useQuery } from 'react-query';
-import { AppBar } from '@material-ui/core';
+import { AppBar, Box } from '@material-ui/core';
 import Head from 'next/head';
 import StateContext from '../utils/statecontext';
 
@@ -17,7 +17,7 @@ const Index = () => {
   const userid = (!session || typeof session === 'undefined') ? undefined : session.user.id;
 
   const { data, isFetching } = useQuery(userid, { refetchOnWindowFocus: false });
-  const { state: { mobile }} = useContext(StateContext);
+  const { state: { mobile } } = useContext(StateContext);
   const theme = useTheme();
 
   const [filtered, setFiltered] = useState(null);
@@ -44,9 +44,11 @@ const Index = () => {
       </Head>
       <SignIn />
       {isFetching && (
-        <Backdrop open={true}>
-          <CircularProgress color="primary" size={40} />
-        </Backdrop>
+        <Box zIndex="speedDial">
+          <Backdrop open={true}>
+            <CircularProgress color="primary" size={40} />
+          </Backdrop>
+        </Box>
       )}
       {session && filtered && (
         <Grid
