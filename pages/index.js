@@ -1,15 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/client';
 import { useTheme } from '@material-ui/styles';
+import { useQuery } from 'react-query';
+import Head from 'next/head';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import AppBar from '@material-ui/core/AppBar';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SignIn from '../components/signin';
 import RecordCard from '../components/recordcard';
 import TraveTypeFieldset from '../components/traveltypefieldset';
-import { useQuery } from 'react-query';
-import { AppBar, Box } from '@material-ui/core';
-import Head from 'next/head';
 import StateContext from '../utils/statecontext';
 
 const Index = () => {
