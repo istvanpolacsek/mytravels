@@ -12,6 +12,11 @@ const PointSchema = new mongoose.Schema({
   }
 })
 
+const PhotoSchema = new mongoose.Schema({
+  mime: { type: String },
+  data: { type: Buffer }
+})
+
 const TravelRecordSchema = new mongoose.Schema({
   userid: { type: String, required: true },
   traveldate: { type: Date, required: true },
@@ -20,9 +25,9 @@ const TravelRecordSchema = new mongoose.Schema({
   departurevicinity: { type: String, required: true },
   departuregeom: PointSchema,
   arrivalid: { type: String, required: true },
-  arrivalvicinity: { type: String, required: true},
+  arrivalvicinity: { type: String, required: true },
   arrivalgeom: PointSchema,
-  arrivalphoto: { type: String }
+  arrivalphoto: PhotoSchema
 })
 
 export default mongoose.models.TravelRecord || mongoose.model('TravelRecord', TravelRecordSchema);

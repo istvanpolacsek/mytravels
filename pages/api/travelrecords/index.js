@@ -33,6 +33,15 @@ export default async (req, res) => {
             key: process.env.GOOGLE_MAPS_API_KEY
           }
         });
+        const photo = await client.placePhoto({
+          params: {
+            key: process.env.GOOGLE_MAPS_API_KEY,
+            photoreference: arrival.data.result
+              .photos[Math.floor(Math.random() * arrival.data.result.photos.length)]
+              .photo_reference,
+            maxheight: 400
+          }
+        });
         record = {
           ...record,
           departurevicinity: departure.data.result.vicinity,
@@ -51,12 +60,12 @@ export default async (req, res) => {
               arrival.data.result.geometry.location.lng,
             ]
           },
-          arrivalphoto: arrival.data.result
-            .photos[Math.floor(Math.random() * arrival.data.result.photos.length)]
-            .photo_reference
+          arrivalphoto: {
+            mime: 'image/jpg',
+            data: photo.data
+          }
         };
         const newrecord = await TravelRecord.create(record);
-        
         if (!newrecord) {
           res.status(400).json({ success: false });
         }
