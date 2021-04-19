@@ -22,7 +22,7 @@ const FormikPlacesAutocomplete = ({ label, error, disabled, ...props }) => {
     script.setAttribute('id', 'google-maps');
     script.src = process.env.NEXT_PUBLIC_MAPS_SRC;
     if (!document.querySelector('#google-maps')) {
-        document.querySelector('head').appendChild(script);
+      document.querySelector('head').appendChild(script);
     }
     loaded.current = true;
   }
@@ -48,8 +48,8 @@ const FormikPlacesAutocomplete = ({ label, error, disabled, ...props }) => {
       setValues(field.value ? [field.value] : []);
       return undefined;
     }
-    
-    fetchPlacePredictions({ input: inputValue }, (results) => { 
+
+    fetchPlacePredictions({ input: inputValue, types: ['(cities)'] }, (results) => {
       let newOptions = [];
       let newValues = [field.value];
 
@@ -58,7 +58,7 @@ const FormikPlacesAutocomplete = ({ label, error, disabled, ...props }) => {
       }
 
       if (results) {
-        newOptions = [...newOptions, ...results];  
+        newOptions = [...newOptions, ...results];
         newOptions.map(option => {
           newValues.push(option.place_id);
         })
@@ -74,7 +74,7 @@ const FormikPlacesAutocomplete = ({ label, error, disabled, ...props }) => {
     <Autocomplete
       options={values}
       value={field.value || null}
-      getOptionLabel={(value) => (options[options.findIndex(e => e.place_id === value)] 
+      getOptionLabel={(value) => (options[options.findIndex(e => e.place_id === value)]
         ? options[options.findIndex(e => e.place_id === value)].structured_formatting.main_text
         : '')}
       filterSelectedOptions
@@ -87,11 +87,11 @@ const FormikPlacesAutocomplete = ({ label, error, disabled, ...props }) => {
         setInputValue(newInputValue);
       }}
       renderInput={(params) => (
-        <TextField 
-          {...params} 
+        <TextField
+          {...params}
           fullWidth
-          variant="outlined" 
-          label={error ? `${label} | ${error}` : label} 
+          variant="outlined"
+          label={error ? `${label} | ${error}` : label}
           error={!!error}
           placeholder="Budapest..."
         />

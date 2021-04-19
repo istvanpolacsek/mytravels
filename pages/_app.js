@@ -29,7 +29,8 @@ const MyApp = ({ Component, pageProps }) => {
     queryClient.current = new QueryClient({
       defaultOptions: {
         queries: {
-          queryFn: fetchRecords
+          queryFn: fetchRecords,
+          refetchOnWindowFocus: false
         }
       }
     });

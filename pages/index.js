@@ -17,7 +17,7 @@ const Index = () => {
   const [session] = useSession();
   const userid = (!session || typeof session === 'undefined') ? undefined : session.user.id;
 
-  const { data, isFetching } = useQuery(userid, { refetchOnWindowFocus: false });
+  const { data, status } = useQuery(userid);
   const { state: { mobile } } = useContext(StateContext);
   const theme = useTheme();
 
@@ -44,7 +44,7 @@ const Index = () => {
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
       </Head>
       <SignIn />
-      {isFetching && (
+      {status === 'loading' && (
         <Box zIndex="speedDial">
           <Backdrop open={true}>
             <CircularProgress color="primary" size={40} />
