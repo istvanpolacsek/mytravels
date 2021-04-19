@@ -10,6 +10,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Save, Cancel, Add } from '@material-ui/icons';
 import RecordNewSchema from '../models/yup/recordnew';
@@ -38,17 +39,18 @@ const performMutation = async (form) => {
 }
 
 const RecordNew = ({ userid, style, width }) => {
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ userid: userid });
+
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation(performMutation, {
+  const { mutate, isError, isLoading } = useMutation(performMutation, {
     onSuccess: () => {
+      handleClose();
       queryClient.refetchQueries(userid);
     }
   });
 
   const { state: { mobile } } = useContext(StateContext);
-
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ userid: userid });
 
   const handleOpen = () => {
     setOpen(true);
@@ -61,7 +63,6 @@ const RecordNew = ({ userid, style, width }) => {
 
   const handleSubmit = (form) => {
     mutate(form);
-    handleClose();
   }
 
   return (
@@ -120,6 +121,7 @@ const RecordNew = ({ userid, style, width }) => {
                     disabled={isLoading}
                   />
                 </Box>
+                {isError && <Typography variant="h5" color="error" >Error saving record</Typography>}
                 <DialogActions>
                   <ButtonGroup>
                     <Button

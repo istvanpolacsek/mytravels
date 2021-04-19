@@ -35,8 +35,9 @@ const performMutation = async ({ form, id }) => {
 
 const RecordEdit = ({ handleMenuClose, record: { _id, userid, traveldate, traveltype } }) => {
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation(performMutation, {
+  const { mutate, isLoading, isError } = useMutation(performMutation, {
     onSuccess: () => {
+      handleClose();
       queryClient.refetchQueries(userid);
     }
   });
@@ -56,7 +57,6 @@ const RecordEdit = ({ handleMenuClose, record: { _id, userid, traveldate, travel
 
   const handleSubmit = async (form) => {
     mutate({ form, id: _id });
-    handleClose();
   }
 
   return (
@@ -71,7 +71,7 @@ const RecordEdit = ({ handleMenuClose, record: { _id, userid, traveldate, travel
         fullWidth
       >
         <DialogTitle>Edit Travel Record</DialogTitle>
-        {isLoading && (<LinearProgress color="secondary" />)}
+        {isLoading && (<LinearProgress />)}
         <DialogContent>
           <Formik validationSchema={RecordEditSchema} initialValues={form} onSubmit={handleSubmit} >
             {({
@@ -95,6 +95,7 @@ const RecordEdit = ({ handleMenuClose, record: { _id, userid, traveldate, travel
                     disabled={isLoading}
                   />
                 </Box>
+                {isError && <Typography variant="h5" color="error" >Error saving record</Typography>}
                 <DialogActions>
                   <ButtonGroup>
                     <Button

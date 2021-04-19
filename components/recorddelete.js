@@ -23,8 +23,9 @@ const performMutation = async (id) => {
 
 const RecordDelete = ({ handleMenuClose, record: { _id, userid } }) => {
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation(performMutation, {
+  const { mutate, isLoading, isError } = useMutation(performMutation, {
     onSuccess: () => {
+      handleClose();
       queryClient.refetchQueries(userid);
     }
   });
@@ -42,7 +43,6 @@ const RecordDelete = ({ handleMenuClose, record: { _id, userid } }) => {
 
   const handleDelete = async () => {
     mutate(_id);
-    handleClose();
   }
 
   return (
@@ -57,7 +57,8 @@ const RecordDelete = ({ handleMenuClose, record: { _id, userid } }) => {
         fullWidth
       >
         <DialogTitle>Confirm Delete</DialogTitle>
-        {isLoading && (<LinearProgress color="secondary" />)}
+        {isLoading && (<LinearProgress />)}
+        {isError && <Typography variant="h5" color="error" >Error deleting record</Typography>}
         <DialogActions>
           <ButtonGroup>
             <Button
