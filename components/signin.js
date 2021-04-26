@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import { Search, Facebook } from '@material-ui/icons';
+import { Search } from '@material-ui/icons';
 
 const SignIn = () => {
   const [session, loading] = useSession();
@@ -29,17 +29,6 @@ const SignIn = () => {
               fullWidth
               >
               google
-            </Button>
-          </Box>
-          <Box m={.5} width={150}>
-            <Button
-              startIcon={<Facebook/>}
-              color="primary"
-              variant="contained"
-              fullWidth
-              disabled={true}
-            >
-              facebook
             </Button>
           </Box>
         </Grid>

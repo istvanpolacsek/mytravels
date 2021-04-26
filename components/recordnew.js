@@ -21,10 +21,8 @@ import withWidth from '@material-ui/core/withWidth';
 import { useMutation, useQueryClient } from 'react-query';
 import StateContext from '../utils/statecontext';
 
-const appurl = process.env.NEXT_PUBLIC_URL;
-
 const performMutation = async (form) => {
-  const response = await fetch(`${appurl}/api/travelrecords/`, {
+  const response = await fetch(`${document.URL}api/travelrecords/`, {
     method: 'POST',
     headers: {
       "Accept": "application/json",

@@ -16,10 +16,8 @@ import FormikDatePicker from './formikdatepicker';
 import FormikTypePicker from './formiktypepicker';
 import { useMutation, useQueryClient } from 'react-query';
 
-const appurl = process.env.NEXT_PUBLIC_URL;
-
 const performMutation = async ({ form, id }) => {
-  const response = await fetch(`${appurl}/api/travelrecords/${id}`, {
+  const response = await fetch(`${document.URL}api/travelrecords/${id}`, {
     method: 'PUT',
     headers: {
       "Accept": "application/json",

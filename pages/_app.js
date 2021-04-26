@@ -12,11 +12,9 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import Navigation from '../components/navigation';
 
-const appurl = process.env.NEXT_PUBLIC_URL;
-
 const fetchRecords = async ({ queryKey }) => {
   const userid = queryKey;
-  const response = await fetch(`${appurl}/api/travelrecords?` + new URLSearchParams({ userid }));
+  const response = await fetch(`${document.URL}api/travelrecords?` + new URLSearchParams({ userid }));
   if (!response.ok) {
     throw new Error('Network Error while fetching data');
   }
