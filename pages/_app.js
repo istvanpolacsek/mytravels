@@ -1,25 +1,30 @@
 import 'fontsource-roboto';
-import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
+import Head from 'next/head';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Hydrate } from 'react-query/hydration';
 import { Provider as AuthProvider } from 'next-auth/client';
 import { CssBaseline } from '@material-ui/core';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import enGBLocale from 'date-fns/locale/en-GB';
-import { StateProvider } from '../utils/statecontext';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Hydrate } from 'react-query/hydration';
+
 import Navigation from '../components/navigation';
+import { StateProvider } from '../utils/statecontext';
 
 const fetchRecords = async ({ queryKey }) => {
-  const userid = queryKey;
-  const response = await fetch(`${document.URL}api/travelrecords?` + new URLSearchParams({ userid }));
-  if (!response.ok) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/travelrecords?` +
+      new URLSearchParams({ userid: queryKey })
+  );
+
+  if (response.ok) {
+    return response.json();
+  } else {
     throw new Error('Network Error while fetching data');
   }
-  return response.json();
-}
+};
 
 const MyApp = ({ Component, pageProps }) => {
   const queryClient = useRef();
@@ -28,9 +33,9 @@ const MyApp = ({ Component, pageProps }) => {
       defaultOptions: {
         queries: {
           queryFn: fetchRecords,
-          refetchOnWindowFocus: false
-        }
-      }
+          refetchOnWindowFocus: false,
+        },
+      },
     });
   }
 
@@ -38,20 +43,16 @@ const MyApp = ({ Component, pageProps }) => {
 
   const { darkState } = state;
 
-  const paletteType = darkState ? 'dark' : 'light';
-  const primary = darkState ? '#b2ebf2' : '#00838f';
-  const secondary = darkState ? '#ffcc80' : '#ef6c00';
-
   const theme = createMuiTheme({
     palette: {
-      type: paletteType,
+      type: darkState ? 'dark' : 'light',
       primary: {
-        main: primary
+        main: darkState ? '#b2ebf2' : '#00838f',
       },
       secondary: {
-        main: secondary
-      }
-    }
+        main: darkState ? '#ffcc80' : '#ef6c00',
+      },
+    },
   });
 
   useEffect(() => {
@@ -62,7 +63,7 @@ const MyApp = ({ Component, pageProps }) => {
     setState({
       ...state,
       darkState: localStorage.getItem('darkState') == 'on' ? true : false,
-      mobile: navigator.maxTouchPoints > 0
+      mobile: navigator.maxTouchPoints > 0,
     });
   }, []);
 
@@ -75,10 +76,19 @@ const MyApp = ({ Component, pageProps }) => {
               <StateProvider value={{ state, setState }}>
                 <Head>
                   <title>My Travels</title>
-                  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+                  <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                  />
                   <meta name="apple-mobile-web-app-capable" content="yes" />
-                  <meta name="apple-mobile-web-app-title" content="My Travels" />
-                  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+                  <meta
+                    name="apple-mobile-web-app-title"
+                    content="My Travels"
+                  />
+                  <meta
+                    name="apple-mobile-web-app-status-bar-style"
+                    content="black"
+                  />
                 </Head>
                 <CssBaseline />
                 <Navigation />
@@ -89,7 +99,7 @@ const MyApp = ({ Component, pageProps }) => {
         </QueryClientProvider>
       </MuiPickersUtilsProvider>
     </ThemeProvider>
-  )
-}
+  );
+};
 
 export default MyApp;

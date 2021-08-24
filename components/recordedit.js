@@ -15,9 +15,10 @@ import RecordEditSchema from '../models/yup/recordedit';
 import FormikDatePicker from './formikdatepicker';
 import FormikTypePicker from './formiktypepicker';
 import { useMutation, useQueryClient } from 'react-query';
+import { Typography } from '@material-ui/core';
 
 const performMutation = async ({ form, id }) => {
-  const response = await fetch(`${document.URL}api/travelrecords/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/travelrecords/${id}`, {
     method: 'PUT',
     headers: {
       "Accept": "application/json",
