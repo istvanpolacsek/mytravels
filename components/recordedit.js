@@ -18,7 +18,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { Typography } from '@material-ui/core';
 
 const performMutation = async ({ form, id }) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/travelrecords/${id}`, {
+  const response = await fetch(`/api/travelrecords/${id}`, {
     method: 'PUT',
     headers: {
       "Accept": "application/json",

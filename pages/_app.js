@@ -15,7 +15,7 @@ import { StateProvider } from '../utils/statecontext';
 
 const fetchRecords = async ({ queryKey }) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/travelrecords?` +
+    '/api/travelrecords?' +
       new URLSearchParams({ userid: queryKey })
   );
 
