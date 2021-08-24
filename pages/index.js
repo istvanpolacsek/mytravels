@@ -1,40 +1,41 @@
 import { useContext, useEffect, useState } from 'react';
-import { useSession } from 'next-auth/client';
-import { useTheme } from '@material-ui/styles';
 import { useQuery } from 'react-query';
 import Head from 'next/head';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
+import { useSession } from 'next-auth/client';
+import { useTheme } from '@material-ui/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Backdrop from '@material-ui/core/Backdrop';
+import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
+
 import SignIn from '../components/signin';
 import RecordCard from '../components/recordcard';
 import TraveTypeFieldset from '../components/traveltypefieldset';
 import StateContext from '../utils/statecontext';
+import { filter } from 'lodash';
 
 const Index = () => {
   const [session] = useSession();
-  const userid = (!session || typeof session === 'undefined') ? undefined : session.user.id;
 
-  const { data, status } = useQuery(userid);
-  const { state: { mobile } } = useContext(StateContext);
+  const { data, status } = useQuery(session?.user.id);
+  const {
+    state: { mobile },
+  } = useContext(StateContext);
   const theme = useTheme();
 
   const [filtered, setFiltered] = useState(null);
-  const [filter, setFilter] = useState('All');
+  const [traveltype, setTraveltype] = useState("");
 
   useEffect(() => {
     if (data) {
-      setFiltered(filter === 'All'
-        ? data.data
-        : data.data.filter(e => e.traveltype === filter));
+      setFiltered(traveltype ? filter(data.data, { traveltype }) : data.data);
     }
-  }, [data, filter]);
+  }, [data, traveltype]);
 
   const handleFilter = (event) => {
-    setFilter(event.target.value);
-  }
+    setTraveltype(event.target.value);
+  };
 
   return (
     <Grid container style={{ height: '100vh' }}>
@@ -57,8 +58,8 @@ const Index = () => {
           direction="column"
           style={{ paddingTop: theme.mixins.toolbar.minHeight + 10 }}
         >
-          <Grid container direction="row" >
-            {filtered.map(record => (
+          <Grid container direction="row">
+            {filtered.map((record) => (
               <RecordCard key={record._id} record={record}></RecordCard>
             ))}
           </Grid>
@@ -67,11 +68,11 @@ const Index = () => {
       )}
       {session && filtered && !mobile && (
         <AppBar fixed="true" style={{ top: 'auto', bottom: 0 }}>
-          <TraveTypeFieldset value={filter} handleChange={handleFilter} />
+          <TraveTypeFieldset value={traveltype} handleChange={handleFilter} />
         </AppBar>
       )}
     </Grid>
   );
-}
+};
 
 export default Index;

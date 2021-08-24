@@ -18,7 +18,7 @@
     "date-fns": "^2.20.2",
     "fontsource-roboto": "^4.0.0",
     "formik": "^2.2.6",
-    "haversine-distance": "^1.2.1",
+    "haversine": "^1.1.1",
     "lodash": "^4.17.21",
     "mongodb": "^3.6.5",
     "mongoose": "^5.12.2",

@@ -10,6 +10,7 @@ async function dbConnect() {
     const db = await mongoose.connect(process.env.NEXTAUTH_DATABASE_URL, {
         useNewUrlParser: true, 
         useUnifiedTopology: true,
+        
     });
 
     connection.isConnected = db.connections[0].readyState;
