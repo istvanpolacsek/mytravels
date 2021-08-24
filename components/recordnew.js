@@ -22,19 +22,19 @@ import { useMutation, useQueryClient } from 'react-query';
 import StateContext from '../utils/statecontext';
 
 const performMutation = async (form) => {
-  const response = await fetch(`${document.URL}api/travelrecords/`, {
+  const response = await fetch('/api/travelrecords/', {
     method: 'POST',
     headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json"
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(form)
+    body: JSON.stringify(form),
   });
   if (!response) {
     throw new Error('Network Error while performing mutation');
   }
   return response.json();
-}
+};
 
 const RecordNew = ({ userid, style, width }) => {
   const [open, setOpen] = useState(false);
@@ -45,23 +45,25 @@ const RecordNew = ({ userid, style, width }) => {
     onSuccess: () => {
       handleClose();
       queryClient.refetchQueries(userid);
-    }
+    },
   });
 
-  const { state: { mobile } } = useContext(StateContext);
+  const {
+    state: { mobile },
+  } = useContext(StateContext);
 
   const handleOpen = () => {
     setOpen(true);
-  }
+  };
 
   const handleClose = () => {
     setForm({ userid: userid });
     setOpen(false);
-  }
+  };
 
   const handleSubmit = (form) => {
     mutate(form);
-  }
+  };
 
   return (
     <Fragment>
@@ -69,41 +71,74 @@ const RecordNew = ({ userid, style, width }) => {
         title={navigator.maxTouchPoints === 0 ? 'Add New Record' : ''}
         placement="top"
       >
-        <Fab color="secondary" style={style} onClick={handleOpen} >
+        <Fab color="secondary" style={style} onClick={handleOpen}>
           <Add fontSize="large" />
         </Fab>
       </Tooltip>
-      <Dialog fullScreen={mobile} open={open} onClose={handleClose} maxWidth="md" fullWidth >
-        <DialogTitle>
-          New Travel Record
-        </DialogTitle>
+      <Dialog
+        fullScreen={mobile}
+        open={open}
+        onClose={handleClose}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>New Travel Record</DialogTitle>
         {open && isLoading && <LinearProgress />}
         <DialogContent>
-          <Formik validationSchema={RecordNewSchema} onSubmit={handleSubmit} initialValues={form} >
-            {({
-              handleSubmit,
-              errors
-            }) => (
-              <Grid component="form" container direction="column" onSubmit={handleSubmit} noValidate  >
-                <Grid container direction="row" justify="space-between" >
-                  <Box m={1} maxWidth="100%" width={width === "xs" ? '100%' : '48%'} style={{ marginLeft: 0, marginRight: 0 }} >
+          <Formik
+            validationSchema={RecordNewSchema}
+            onSubmit={handleSubmit}
+            initialValues={form}
+          >
+            {({ handleSubmit, errors }) => (
+              <Grid
+                component="form"
+                container
+                direction="column"
+                onSubmit={handleSubmit}
+                noValidate
+              >
+                <Grid container direction="row" justify="space-between">
+                  <Box
+                    m={1}
+                    maxWidth="100%"
+                    width={width === 'xs' ? '100%' : '48%'}
+                    style={{ marginLeft: 0, marginRight: 0 }}
+                  >
                     <FormikDatePicker
                       name="traveldate"
-                      label={errors.traveldate ? `Date | ${errors.traveldate}` : "Date"}
+                      label={
+                        errors.traveldate
+                          ? `Date | ${errors.traveldate}`
+                          : 'Date'
+                      }
                       error={!!errors.traveldate}
                       disabled={isLoading}
                     />
                   </Box>
-                  <Box m={1} maxWidth="100%" width={width === "xs" ? '100%' : '48%'} style={{ marginLeft: 0, marginRight: 0 }}>
+                  <Box
+                    m={1}
+                    maxWidth="100%"
+                    width={width === 'xs' ? '100%' : '48%'}
+                    style={{ marginLeft: 0, marginRight: 0 }}
+                  >
                     <FormikTypePicker
                       name="traveltype"
-                      label={errors.traveltype ? `Type | ${errors.traveltype}` : "Type"}
+                      label={
+                        errors.traveltype
+                          ? `Type | ${errors.traveltype}`
+                          : 'Type'
+                      }
                       error={!!errors.traveltype}
                       disabled={isLoading}
                     />
                   </Box>
                 </Grid>
-                <Box m={1} width="100%" style={{ marginLeft: 0, marginRight: 0 }} >
+                <Box
+                  m={1}
+                  width="100%"
+                  style={{ marginLeft: 0, marginRight: 0 }}
+                >
                   <FormikPlacesAutocomplete
                     name="departureid"
                     label="Departure"
@@ -111,7 +146,11 @@ const RecordNew = ({ userid, style, width }) => {
                     disabled={isLoading}
                   />
                 </Box>
-                <Box m={1} width="100%" style={{ marginLeft: 0, marginRight: 0 }}>
+                <Box
+                  m={1}
+                  width="100%"
+                  style={{ marginLeft: 0, marginRight: 0 }}
+                >
                   <FormikPlacesAutocomplete
                     name="arrivalid"
                     label="Arrival"
@@ -119,7 +158,11 @@ const RecordNew = ({ userid, style, width }) => {
                     disabled={isLoading}
                   />
                 </Box>
-                {isError && <Typography variant="h5" color="error" >Error saving record</Typography>}
+                {isError && (
+                  <Typography variant="h5" color="error">
+                    Error saving record
+                  </Typography>
+                )}
                 <DialogActions>
                   <ButtonGroup>
                     <Button
@@ -149,6 +192,6 @@ const RecordNew = ({ userid, style, width }) => {
       </Dialog>
     </Fragment>
   );
-}
+};
 
 export default withWidth()(RecordNew);

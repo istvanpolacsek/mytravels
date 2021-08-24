@@ -10,7 +10,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { useMutation, useQueryClient } from 'react-query';
 
 const performMutation = async (id) => {
-  const response = await fetch(`${document.URL}api/travelrecords/${id}`, {
+  const response = await fetch(`/api/travelrecords/${id}`, {
     method: 'DELETE',
   });
   if (!response) {
