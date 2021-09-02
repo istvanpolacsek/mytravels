@@ -12,10 +12,12 @@ export default async (req, res) => {
   switch (method) {
     case 'GET':
       try {
-        const records = await TravelRecord.find({ userid: req.query.userid }).sort('-traveldate');
-        res.status(200).json({ success: true, data: records });
+        const records = await TravelRecord.find({
+          userid: req.query.userid,
+        });
+        res.status(200).json(records);
       } catch (error) {
-        res.status(400).json({ success: false });
+        res.status(400).json([]);
       }
       break;
     case 'POST':
@@ -24,23 +26,24 @@ export default async (req, res) => {
         const departure = await client.placeDetails({
           params: {
             place_id: record.departureid,
-            key: process.env.GOOGLE_MAPS_API_KEY
-          }
+            key: process.env.GOOGLE_MAPS_API_KEY,
+          },
         });
         const arrival = await client.placeDetails({
           params: {
             place_id: record.arrivalid,
-            key: process.env.GOOGLE_MAPS_API_KEY
-          }
+            key: process.env.GOOGLE_MAPS_API_KEY,
+          },
         });
         const photo = await client.placePhoto({
           params: {
             key: process.env.GOOGLE_MAPS_API_KEY,
-            photoreference: arrival.data.result
-              .photos[Math.floor(Math.random() * arrival.data.result.photos.length)]
-              .photo_reference,
-            maxheight: 400
-          }
+            photoreference:
+              arrival.data.result.photos[
+                Math.floor(Math.random() * arrival.data.result.photos.length)
+              ].photo_reference,
+            maxheight: 400,
+          },
         });
         record = {
           ...record,
@@ -50,7 +53,7 @@ export default async (req, res) => {
             coordinates: [
               departure.data.result.geometry.location.lat,
               departure.data.result.geometry.location.lng,
-            ]
+            ],
           },
           arrivalvicinity: arrival.data.result.vicinity,
           arrivalgeom: {
@@ -58,24 +61,24 @@ export default async (req, res) => {
             coordinates: [
               arrival.data.result.geometry.location.lat,
               arrival.data.result.geometry.location.lng,
-            ]
+            ],
           },
           arrivalphoto: {
             mime: 'image/jpg',
-            data: photo.data
-          }
+            data: photo.data,
+          },
         };
         const newrecord = await TravelRecord.create(record);
         if (!newrecord) {
-          res.status(400).json({ success: false });
+          res.status(400).json({});
         }
-        res.status(201).json({ success: true, data: newrecord });
+        res.status(201).json(newrecord);
       } catch (error) {
-        res.status(400).json({ success: false });
+        res.status(400).json({});
       }
       break;
     default:
-      res.status(400).json({ success: false });
+      res.status(400).json({});
       break;
   }
-}
+};

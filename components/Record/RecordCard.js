@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { find } from 'lodash';
 import haversine from 'haversine';
 import Box from '@material-ui/core/Box';
@@ -11,37 +11,52 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import { Close, MoreVert } from '@material-ui/icons';
+import { Close, Delete, Edit, MoreVert } from '@material-ui/icons';
 
-import RecordDelete from './recorddelete';
-import RecordEdit from './recordedit';
-import { TravelTypes } from '../utils/traveltypes';
-import { haversineOptions } from '../utils/constants';
+import RecordDelete from './RecordDelete';
+import { TravelTypes } from '../../utils/traveltypes';
+import { haversineOptions } from '../../utils/constants';
+import { Skeleton } from '@material-ui/lab';
+import useRoutes from 'hooks/useRoutes';
 
-const RecordCard = ({
-  record,
-  record: {
+const RecordCard = ({ record }) => {
+  const { toRecordForm, toRecordDelete } = useRoutes();
+  const {
+    _id,
     arrivalphoto,
+    traveltype,
     traveldate,
     arrivalvicinity,
     departurevicinity,
     arrivalgeom,
     departuregeom,
-  },
-}) => {
+  } = record;
+
   const [anchor, setAnchor] = useState(null);
 
-  const handleMenuClose = () => {
-    setAnchor(null);
-  };
+  const distance = useMemo(() => {
+    return departuregeom
+      ? haversine(
+          departuregeom.coordinates,
+          arrivalgeom.coordinates,
+          haversineOptions
+        ).toFixed(0)
+      : undefined;
+  }, [departuregeom, arrivalgeom]);
 
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Box m={1}>
         <Card>
           <CardHeader
-            avatar={find(TravelTypes, { value: record.traveltype }).label}
-            title={`${departurevicinity} - ${arrivalvicinity}`}
+            avatar={find(TravelTypes, { value: traveltype }).label}
+            title={
+              departurevicinity ? (
+                `${departurevicinity} - ${arrivalvicinity}`
+              ) : (
+                <Skeleton variant="text" width={180} />
+              )
+            }
             subheader={new Intl.DateTimeFormat('en-GB').format(
               new Date(traveldate)
             )}
@@ -54,7 +69,7 @@ const RecordCard = ({
               </IconButton>
             }
           />
-          {typeof arrivalphoto === 'object' && (
+          {arrivalphoto ? (
             <CardMedia
               component="img"
               height="150"
@@ -62,6 +77,8 @@ const RecordCard = ({
                 arrivalphoto.data.data
               ).toString('base64')}`}
             />
+          ) : (
+            <Skeleton variant="rect" height={150} />
           )}
           <CardContent>
             <Grid container direction="row" justify="space-between">
@@ -71,13 +88,13 @@ const RecordCard = ({
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="body2" component="p" color="primary">
-                  {`${haversine(
-                    departuregeom.coordinates,
-                    arrivalgeom.coordinates,
-                    haversineOptions
-                  ).toFixed(0)} km`}
-                </Typography>
+                {distance ? (
+                  <Typography variant="body2" component="p" color="primary">
+                    {`${distance} km`}
+                  </Typography>
+                ) : (
+                  <Skeleton variant="text" width={50} />
+                )}
               </Grid>
             </Grid>
           </CardContent>
@@ -87,13 +104,27 @@ const RecordCard = ({
         anchorEl={anchor}
         keepMounted
         open={Boolean(anchor)}
-        onClose={handleMenuClose}
+        onClose={() => setAnchor(null)}
       >
-        <MenuItem onClick={handleMenuClose}>
+        <MenuItem onClick={() => setAnchor(null)}>
           <Close fontSize="large" color="secondary" />
         </MenuItem>
-        <RecordEdit record={record} handleMenuClose={handleMenuClose} />
-        <RecordDelete record={record} handleMenuClose={handleMenuClose} />
+        <MenuItem
+          onClick={() => {
+            toRecordForm(_id);
+            setAnchor(null);
+          }}
+        >
+          <Edit fontSize="large" color="secondary" />
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            toRecordDelete(_id);
+            setAnchor(null);
+          }}
+        >
+          <Delete fontSize="large" color="secondary" />
+        </MenuItem>
       </Menu>
     </Grid>
   );

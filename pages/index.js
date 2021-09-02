@@ -1,41 +1,38 @@
 import { useContext, useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
 import Head from 'next/head';
-import { useSession } from 'next-auth/client';
-import { useTheme } from '@material-ui/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Backdrop from '@material-ui/core/Backdrop';
-import Box from '@material-ui/core/Box';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { getSession, useSession } from 'next-auth/client';
+import { filter, map, reverse, sortBy } from 'lodash';
 import Grid from '@material-ui/core/Grid';
+import { useTheme } from '@material-ui/styles';
 
-import SignIn from '../components/signin';
-import RecordCard from '../components/recordcard';
-import TraveTypeFieldset from '../components/traveltypefieldset';
-import StateContext from '../utils/statecontext';
-import { filter } from 'lodash';
+import RecordCard from 'components/Record/RecordCard';
+import RecordCardSkeleton from 'components/Record/RecordCardSkeleton';
+import TraveTypeFilter from 'components/TravelTypeFilter/TravelTypeFilter';
+import useUserData from 'hooks/useUserData';
+import StateContext from 'utils/statecontext';
 
 const Index = () => {
   const [session] = useSession();
-
-  const { data, status } = useQuery(session?.user.id);
+  const { data, isLoading } = useUserData();
+  const theme = useTheme();
   const {
     state: { mobile },
   } = useContext(StateContext);
-  const theme = useTheme();
 
-  const [filtered, setFiltered] = useState(null);
-  const [traveltype, setTraveltype] = useState("");
+  const [filtered, setFiltered] = useState(data || []);
+  const [traveltype, setTraveltype] = useState('');
 
   useEffect(() => {
     if (data) {
-      setFiltered(traveltype ? filter(data.data, { traveltype }) : data.data);
+      setFiltered(traveltype ? filter(data, { traveltype }) : data);
     }
   }, [data, traveltype]);
 
-  const handleFilter = (event) => {
-    setTraveltype(event.target.value);
+  const handleFilter = ({ target: { value } }) => {
+    setTraveltype(value);
   };
+
+  const presented = reverse(sortBy(filtered, ['traveldate']));
 
   return (
     <Grid container style={{ height: '100vh' }}>
@@ -44,35 +41,39 @@ const Index = () => {
         <meta name="apple-mobile-web-app-title" content="My Travels" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
       </Head>
-      <SignIn />
-      {status === 'loading' && (
-        <Box zIndex="speedDial">
-          <Backdrop open={true}>
-            <CircularProgress color="primary" size={40} />
-          </Backdrop>
-        </Box>
-      )}
-      {session && filtered && (
-        <Grid
-          container
-          direction="column"
-          style={{ paddingTop: theme.mixins.toolbar.minHeight + 10 }}
-        >
-          <Grid container direction="row">
-            {filtered.map((record) => (
-              <RecordCard key={record._id} record={record}></RecordCard>
+      <Grid
+        container
+        direction="column"
+        style={{ paddingTop: theme.mixins.toolbar.minHeight + 20 }}
+      >
+        {session && (
+          <Grid container justify="center">
+            <TraveTypeFilter value={traveltype} handleChange={handleFilter} />
+          </Grid>
+        )}
+        {session && isLoading && (
+          <Grid container>
+            {map(mobile ? [0, 1, 2] : [0, 1, 2, 3], (value) => (
+              <RecordCardSkeleton key={value} />
             ))}
           </Grid>
-          <Grid item style={{ height: 100 }}></Grid>
+        )}
+        <Grid container direction="row">
+          {map(presented, (record, i) => (
+            <RecordCard key={i} record={record}></RecordCard>
+          ))}
         </Grid>
-      )}
-      {session && filtered && !mobile && (
-        <AppBar fixed="true" style={{ top: 'auto', bottom: 0 }}>
-          <TraveTypeFieldset value={traveltype} handleChange={handleFilter} />
-        </AppBar>
-      )}
+        <div style={{ height: mobile ? '100px' : '60px' }} />
+      </Grid>
     </Grid>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+  return {
+    props: { session },
+  };
 };
 
 export default Index;
