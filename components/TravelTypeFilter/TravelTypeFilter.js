@@ -9,8 +9,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import AllInclusive from '@material-ui/icons/AllInclusive';
 
-import { TravelTypes } from 'utils/TravelTypes';
-import StateContext from 'utils/StateContext';
+import { TravelTypes } from 'utils/traveltypes';
+import StateContext from 'utils/statecontext';
 
 const TraveTypeFilter = ({ value, handleChange }) => {
   const {

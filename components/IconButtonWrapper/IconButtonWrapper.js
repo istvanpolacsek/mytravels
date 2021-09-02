@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import StateContext from 'utils/StateContext';
+import StateContext from 'utils/statecontext';
 
 const IconButtonWrapper = ({ title, children, ...props }) => {
   const {

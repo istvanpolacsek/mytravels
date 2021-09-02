@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { Close, Delete, Edit, MoreVert } from '@material-ui/icons';
 
 import RecordDelete from './RecordDelete';
-import { TravelTypes } from '../../utils/TravelTypes';
+import { TravelTypes } from '../../utils/traveltypes';
 import { haversineOptions } from '../../utils/constants';
 import { Skeleton } from '@material-ui/lab';
 import useRoutes from 'hooks/useRoutes';

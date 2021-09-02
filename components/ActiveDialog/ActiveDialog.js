@@ -6,7 +6,7 @@ import Slide from '@material-ui/core/Slide';
 
 import * as dialogs from 'components/ActiveDialog/index';
 import useRoutes from 'hooks/useRoutes';
-import StateContext from 'utils/StateContext';
+import StateContext from 'utils/statecontext';
 
 const transitionProps = {
   mountOnEnter: true,

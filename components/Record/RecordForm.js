@@ -20,7 +20,7 @@ import FormikDatePicker from 'components/FormikPickers/FormikDatePicker';
 import FormikPlacesAutocomplete from 'components/FormikPickers/FormikPlacesAutocomplete';
 import FormikTypePicker from 'components/FormikPickers/FormikTypePicker';
 import RecordNewSchema from 'models/yup/recordnew';
-import StateContext from 'utils/StateContext';
+import StateContext from 'utils/statecontext';
 import useRoutes from 'hooks/useRoutes';
 import useUserData from 'hooks/useUserData';
 import { filter, find } from 'lodash';

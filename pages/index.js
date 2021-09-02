@@ -9,7 +9,7 @@ import RecordCard from 'components/Record/RecordCard';
 import RecordCardSkeleton from 'components/Record/RecordCardSkeleton';
 import TraveTypeFilter from 'components/TravelTypeFilter/TravelTypeFilter';
 import useUserData from 'hooks/useUserData';
-import StateContext from 'utils/StateContext';
+import StateContext from 'utils/statecontext';
 
 const Index = () => {
   const [session] = useSession();

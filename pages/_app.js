@@ -11,7 +11,7 @@ import enGBLocale from 'date-fns/locale/en-GB';
 
 import ActiveDialog from 'components/ActiveDialog/ActiveDialog';
 import Navigation from 'components/Navigation/Navigation';
-import { StateProvider } from 'utils/StateContext';
+import { StateProvider } from 'utils/statecontext';
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 

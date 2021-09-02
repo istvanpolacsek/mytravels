@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import { TravelTypes } from 'utils/TravelTypes';
+import { TravelTypes } from 'utils/traveltypes';
 
 const FormikTypePicker = (props) => {
   const { setFieldValue } = useFormikContext();

@@ -3,7 +3,7 @@ import Brightness3 from '@material-ui/icons/Brightness3';
 import WbSunny from '@material-ui/icons/WbSunny';
 
 import IconButtonWrapper from 'components/IconButtonWrapper/IconButtonWrapper';
-import StateContext from 'utils/StateContext';
+import StateContext from 'utils/statecontext';
 
 const ColorModeButton = (props) => {
   const { state, setState } = useContext(StateContext);
