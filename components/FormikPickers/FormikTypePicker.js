@@ -1,10 +1,11 @@
 import { Fragment } from 'react';
 import { useField, useFormikContext } from 'formik';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
-import { TravelTypes } from '../utils/traveltypes';
 import { map } from 'lodash';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+
+import { TravelTypes } from 'utils/TravelTypes';
 
 const FormikTypePicker = (props) => {
   const { setFieldValue } = useFormikContext();

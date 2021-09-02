@@ -1,46 +1,25 @@
 import 'fontsource-roboto';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Hydrate } from 'react-query/hydration';
 import { Provider as AuthProvider } from 'next-auth/client';
-import { CssBaseline } from '@material-ui/core';
+import { SWRConfig } from 'swr';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import enGBLocale from 'date-fns/locale/en-GB';
 
-import Navigation from '../components/navigation';
-import { StateProvider } from '../utils/statecontext';
+import ActiveDialog from 'components/ActiveDialog/ActiveDialog';
+import Navigation from 'components/Navigation/Navigation';
+import { StateProvider } from 'utils/StateContext';
 
-const fetchRecords = async ({ queryKey }) => {
-  const response = await fetch(
-    '/api/travelrecords?' +
-      new URLSearchParams({ userid: queryKey })
-  );
-
-  if (response.ok) {
-    return response.json();
-  } else {
-    throw new Error('Network Error while fetching data');
-  }
-};
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const MyApp = ({ Component, pageProps }) => {
-  const queryClient = useRef();
-  if (!queryClient.current) {
-    queryClient.current = new QueryClient({
-      defaultOptions: {
-        queries: {
-          queryFn: fetchRecords,
-          refetchOnWindowFocus: false,
-        },
-      },
-    });
-  }
-
-  const [state, setState] = useState({ darkState: false });
-
+  const [state, setState] = useState({
+    darkState: false,
+    mobile: false,
+  });
   const { darkState } = state;
 
   const theme = createMuiTheme({
@@ -63,42 +42,38 @@ const MyApp = ({ Component, pageProps }) => {
     setState({
       ...state,
       darkState: localStorage.getItem('darkState') == 'on' ? true : false,
-      mobile: navigator.maxTouchPoints > 0,
+      mobile: !!navigator.maxTouchPoints,
     });
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={enGBLocale}>
-        <QueryClientProvider client={queryClient.current}>
-          <Hydrate state={pageProps.dehydratedState}>
-            <AuthProvider session={pageProps.session}>
-              <StateProvider value={{ state, setState }}>
-                <Head>
-                  <title>My Travels</title>
-                  <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1, shrink-to-fit=no"
-                  />
-                  <meta name="apple-mobile-web-app-capable" content="yes" />
-                  <meta
-                    name="apple-mobile-web-app-title"
-                    content="My Travels"
-                  />
-                  <meta
-                    name="apple-mobile-web-app-status-bar-style"
-                    content="black"
-                  />
-                </Head>
-                <CssBaseline />
-                <Navigation />
-                <Component {...pageProps} />
-              </StateProvider>
-            </AuthProvider>
-          </Hydrate>
-        </QueryClientProvider>
-      </MuiPickersUtilsProvider>
-    </ThemeProvider>
+    <AuthProvider session={pageProps.session}>
+      <SWRConfig value={{ fetcher }}>
+        <StateProvider value={{ state, setState }}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils} locale={enGBLocale}>
+            <ThemeProvider theme={theme}>
+              <Head>
+                <title>My Travels</title>
+                <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                />
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <meta name="apple-mobile-web-app-title" content="My Travels" />
+                <meta
+                  name="apple-mobile-web-app-status-bar-style"
+                  content="black"
+                />
+              </Head>
+              <CssBaseline />
+              <Navigation />
+              <ActiveDialog />
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </MuiPickersUtilsProvider>
+        </StateProvider>
+      </SWRConfig>
+    </AuthProvider>
   );
 };
 

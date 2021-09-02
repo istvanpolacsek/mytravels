@@ -1,31 +1,29 @@
 import { useField, useFormikContext } from 'formik';
 import { DatePicker } from '@material-ui/pickers';
 
-const FormikDatePicker = ({ label, error, disabled, ...props }) => {
+const FormikDatePicker = (props) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
+
+  const { name, value } = field;
 
   const setDate = (value) => {
     const date = new Date(value);
     date.setUTCHours(0, 0, 0, 0);
-    return date;
+    setFieldValue(name, date);
   }
 
   return (
     <DatePicker
       disableToolbar
       fullWidth
+      autoOk
       variant="inline"
       inputVariant="outlined"
-      autoOk
-      label={label}
-      error={error}
       format="MMMM dd, yyyy"
-      value={(field.value && setDate(field.value)) || null}
-      onChange={value => {
-        setFieldValue(field.name, setDate(value));
-      }}
-      disabled={disabled}
+      value={value || null}
+      onChange={setDate}
+      {...props}
     />
   );
 }
