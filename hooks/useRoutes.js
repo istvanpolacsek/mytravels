@@ -21,6 +21,12 @@ const useRoutes = () => {
     });
   };
 
+  const toSignInPage = () => {
+    router.push({
+      pathname: '/signin',
+    });
+  };
+
   const toRecordForm = (recordid) => {
     router.push({
       pathname,
@@ -57,6 +63,7 @@ const useRoutes = () => {
     toRecordForm,
     toRecordStats,
     toSignIn,
+    toSignInPage,
   };
 };
 

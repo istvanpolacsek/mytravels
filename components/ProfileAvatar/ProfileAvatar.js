@@ -10,15 +10,12 @@ import useRoutes from 'hooks/useRoutes';
 
 const ProfileAvatar = () => {
   const [session, loading] = useSession();
-  const { toSignIn } = useRoutes();
+  const { toSignInPage } = useRoutes();
 
   if (loading && !session) return <CircularProgress color="primary" />;
   if (!loading && !session)
     return (
-      <IconButtonWrapper
-        title="Sign In"
-        onClick={toSignIn}
-      >
+      <IconButtonWrapper color="primary" title="Sign In" onClick={toSignInPage}>
         <AccountCircle />
       </IconButtonWrapper>
     );

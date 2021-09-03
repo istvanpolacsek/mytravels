@@ -9,11 +9,13 @@ import RecordCard from 'components/Record/RecordCard';
 import RecordCardSkeleton from 'components/Record/RecordCardSkeleton';
 import TraveTypeFilter from 'components/TravelTypeFilter/TravelTypeFilter';
 import useUserData from 'hooks/useUserData';
+import useRoutes from 'hooks/useRoutes';
 import StateContext from 'utils/statecontext';
 
 const Index = () => {
   const [session] = useSession();
   const { data, isLoading } = useUserData();
+  const { toSignInPage } = useRoutes();
   const theme = useTheme();
   const {
     state: { mobile },
@@ -33,6 +35,11 @@ const Index = () => {
   };
 
   const presented = reverse(sortBy(filtered, ['traveldate']));
+
+  if (typeof window !== 'undefined' && !session) {
+    toSignInPage();
+    return null;
+  }
 
   return (
     <Grid container style={{ height: '100vh' }}>

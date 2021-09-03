@@ -6,7 +6,7 @@ const options = {
     Providers.Google({
         clientId: process.env.NEXTAUTH_GOOGLE_ID,
         clientSecret: process.env.NEXTAUTH_GOOGLE_SECRET,
-        state: false
+        protection: "pkce"
       })
   ],
   secret: process.env.NEXTAUTH_SECRET,
