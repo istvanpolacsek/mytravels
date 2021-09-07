@@ -10,12 +10,10 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import AllInclusive from '@material-ui/icons/AllInclusive';
 
 import { TravelTypes } from 'utils/traveltypes';
-import StateContext from 'utils/statecontext';
+import { StateContext } from 'components/ContextWrapper/ContextWrapper';
 
 const TraveTypeFilter = ({ value, handleChange }) => {
-  const {
-    state: { mobile },
-  } = useContext(StateContext);
+  const { isMobile } = useContext(StateContext);
 
   const FilterControl = () => {
     return (
@@ -39,7 +37,7 @@ const TraveTypeFilter = ({ value, handleChange }) => {
     );
   };
 
-  return mobile ? (
+  return isMobile ? (
     <FilterControl />
   ) : (
     <AppBar fixed="true" style={{ top: 'auto', bottom: 0 }}>

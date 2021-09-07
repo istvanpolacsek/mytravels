@@ -3,23 +3,21 @@ import Brightness3 from '@material-ui/icons/Brightness3';
 import WbSunny from '@material-ui/icons/WbSunny';
 
 import IconButtonWrapper from 'components/IconButtonWrapper/IconButtonWrapper';
-import StateContext from 'utils/statecontext';
+import { DispatchContext, StateContext } from 'components/ContextWrapper/ContextWrapper';
+import { TOGGLE_DARK_MODE } from 'utils/constants';
 
 const ColorModeButton = (props) => {
-  const { state, setState } = useContext(StateContext);
-
-  const handleThemeChange = () => {
-    localStorage.setItem('darkState', state.darkState ? 'off' : 'on');
-    setState({ ...state, darkState: !state.darkState });
-  };
+  const { isDarkMode } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
 
   return (
     <IconButtonWrapper
-      title="Toogle Dark Mode"
-      onClick={handleThemeChange}
+      title="Toggle Dark Mode"
+      onClick={() => dispatch({ type: TOGGLE_DARK_MODE })}
       color="primary"
+      {...props}
     >
-      {state.darkState ? <WbSunny {...props} /> : <Brightness3 {...props} />}
+      {isDarkMode ? <WbSunny fontSize="large" /> : <Brightness3 fontSize="large"/>}
     </IconButtonWrapper>
   );
 };

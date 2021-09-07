@@ -6,7 +6,7 @@ import Slide from '@material-ui/core/Slide';
 
 import * as dialogs from 'components/ActiveDialog/index';
 import useRoutes from 'hooks/useRoutes';
-import StateContext from 'utils/statecontext';
+import { StateContext } from 'components/ContextWrapper/ContextWrapper';
 
 const transitionProps = {
   mountOnEnter: true,
@@ -14,11 +14,9 @@ const transitionProps = {
 };
 
 const Transition = forwardRef((props, ref) => {
-  const {
-    state: { mobile },
-  } = useContext(StateContext);
+  const { isMobile } = useContext(StateContext);
 
-  return mobile ? (
+  return isMobile ? (
     <Slide direction="up" ref={ref} {...props} {...transitionProps} />
   ) : (
     <Fade ref={ref} {...props} {...transitionProps} />
@@ -31,9 +29,7 @@ const ActiveDialog = () => {
   const dialog = router.query?.dialogName;
   const maxWidth = router.query.dialogWidth ?? 'xs';
 
-  const {
-    state: { mobile },
-  } = useContext(StateContext);
+  const { isMobile } = useContext(StateContext);
 
   const Content = dialogs[dialog];
 
@@ -42,7 +38,7 @@ const ActiveDialog = () => {
       fullWidth
       maxWidth={maxWidth}
       open={!!dialog}
-      fullScreen={mobile}
+      fullScreen={isMobile}
       onClose={toHomePage}
       TransitionComponent={Transition}
     >

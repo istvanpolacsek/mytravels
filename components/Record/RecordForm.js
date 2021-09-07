@@ -20,15 +20,15 @@ import FormikDatePicker from 'components/FormikPickers/FormikDatePicker';
 import FormikPlacesAutocomplete from 'components/FormikPickers/FormikPlacesAutocomplete';
 import FormikTypePicker from 'components/FormikPickers/FormikTypePicker';
 import RecordNewSchema from 'models/yup/recordnew';
-import StateContext from 'utils/statecontext';
 import useRoutes from 'hooks/useRoutes';
 import useUserData from 'hooks/useUserData';
 import { filter, find } from 'lodash';
 import RecordEditSchema from 'models/yup/recordedit';
+import { StateContext } from 'components/ContextWrapper/ContextWrapper';
 
 const fieldStyle = { marginLeft: 0, marginRight: 0 };
 
-const performMutation = async (record, id) => {
+const performMutation = async(record, id) => {
   const url = id ? `/api/travelrecords/${id}` : '/api/travelrecords/';
   const method = id ? 'PUT' : 'POST';
 
@@ -53,16 +53,14 @@ const RecordForm = () => {
   const {
     user: { id },
   } = session;
-  const {
-    state: { mobile },
-  } = useContext(StateContext);
+  const { isMobile } = useContext(StateContext);
   const { mutate } = useSWRConfig();
   const { data, url } = useUserData();
   const { toHomePage } = useRoutes();
 
   const recordid = router.query?.recordid;
 
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async(values) => {
     if (recordid) {
       const updatedRecord = { ...find(data, { _id: recordid }), ...values };
       const updatedData = [
@@ -115,10 +113,10 @@ const RecordForm = () => {
             >
               <Grid
                 container
-                direction={mobile ? 'column' : 'row'}
+                direction={isMobile ? 'column' : 'row'}
                 justify="space-between"
               >
-                <Box m={1} width={mobile ? '100%' : '48%'} style={fieldStyle}>
+                <Box m={1} width={isMobile ? '100%' : '48%'} style={fieldStyle}>
                   <FormikDatePicker
                     name="traveldate"
                     label={
@@ -128,7 +126,7 @@ const RecordForm = () => {
                     disabled={isSubmitting}
                   />
                 </Box>
-                <Box m={1} width={mobile ? '100%' : '48%'} style={fieldStyle}>
+                <Box m={1} width={isMobile ? '100%' : '48%'} style={fieldStyle}>
                   <FormikTypePicker
                     name="traveltype"
                     label={
