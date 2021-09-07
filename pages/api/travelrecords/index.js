@@ -6,7 +6,7 @@ dbConnect();
 
 const client = new Client();
 
-export default async (req, res) => {
+const index = async(req, res) => {
   const { method } = req;
 
   switch (method) {
@@ -39,8 +39,8 @@ export default async (req, res) => {
           params: {
             key: process.env.GOOGLE_MAPS_API_KEY,
             photoreference:
-              arrival.data.result.photos[
-                Math.floor(Math.random() * arrival.data.result.photos.length)
+            arrival.data.result.photos[
+              Math.floor(Math.random() * arrival.data.result.photos.length)
               ].photo_reference,
             maxheight: 400,
           },
@@ -82,3 +82,5 @@ export default async (req, res) => {
       break;
   }
 };
+
+export default index;

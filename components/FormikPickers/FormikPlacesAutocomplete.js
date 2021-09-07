@@ -27,7 +27,7 @@ const FormikPlacesAutocomplete = (props) => {
           structured_formatting: { main_text, secondary_text },
         }) => {
           return { place_id, main_text, secondary_text };
-        }
+        },
       );
       setOptions([...(value ? [value] : []), ...options]);
     });
@@ -37,7 +37,7 @@ const FormikPlacesAutocomplete = (props) => {
     if (!isEmpty(value)) {
       setFieldValue(name, value.place_id);
     }
-  }, [value]);
+  }, [value, name, setFieldValue]);
 
   return (
     <Autocomplete
