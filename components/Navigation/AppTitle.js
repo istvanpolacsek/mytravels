@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { useRouter } from 'next/dist/client/router';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
 const AppTitle = () => {

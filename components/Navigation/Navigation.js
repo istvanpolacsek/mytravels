@@ -2,12 +2,12 @@ import { memo, useContext } from 'react';
 
 import MobileNavigation from 'components/Navigation/MobileNavigation';
 import DesktopNavigation from 'components/Navigation/DesktopNavigation';
-import StateContext from 'utils/statecontext';
+import { StateContext } from 'components/ContextWrapper/ContextWrapper';
 
 const Navigation = () => {
-  const { state } = useContext(StateContext);
+  const { isMobile } = useContext(StateContext);
 
-  return state.mobile ? <MobileNavigation /> : <DesktopNavigation />;
+  return isMobile ? <MobileNavigation /> : <DesktopNavigation />;
 };
 
 export default memo(Navigation);

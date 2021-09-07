@@ -2,14 +2,12 @@ import { useContext } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import StateContext from 'utils/statecontext';
+import { StateContext } from 'components/ContextWrapper/ContextWrapper';
 
-const IconButtonWrapper = ({ title, children, ...props }) => {
-  const {
-    state: { mobile },
-  } = useContext(StateContext);
+const IconButtonWrapper = ({ title, children, user, ...props }) => {
+  const { isMobile } = useContext(StateContext);
 
-  return mobile ? (
+  return isMobile ? (
     <IconButton {...props}>{children}</IconButton>
   ) : (
     <Tooltip title={title}>

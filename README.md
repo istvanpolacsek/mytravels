@@ -12,7 +12,7 @@ Tools and Technologies used:
 - Material UI CSS library
 - Next-auth to manage authentication (supported providers: Google)
 - MongoDB / Mongoose to manage user and persistent data
-- React Query to fetch user data and manage fetched query lifecycle
+- SWR to fetch user data and manage fetched query lifecycle
 - Next-pwa to manage mobile device home screen access
 - Google Maps and Places API to fetch locations from an autocomplete text field
 

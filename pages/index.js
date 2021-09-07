@@ -10,16 +10,14 @@ import RecordCardSkeleton from 'components/Record/RecordCardSkeleton';
 import TraveTypeFilter from 'components/TravelTypeFilter/TravelTypeFilter';
 import useUserData from 'hooks/useUserData';
 import useRoutes from 'hooks/useRoutes';
-import StateContext from 'utils/statecontext';
+import { StateContext } from 'components/ContextWrapper/ContextWrapper';
 
 const Index = () => {
   const [session] = useSession();
   const { data, isLoading } = useUserData();
   const { toSignInPage } = useRoutes();
   const theme = useTheme();
-  const {
-    state: { mobile },
-  } = useContext(StateContext);
+  const { isMobile } = useContext(StateContext);
 
   const [filtered, setFiltered] = useState(data || []);
   const [traveltype, setTraveltype] = useState('');
@@ -60,7 +58,7 @@ const Index = () => {
         )}
         {session && isLoading && (
           <Grid container>
-            {map(mobile ? [0, 1, 2] : [0, 1, 2, 3], (value) => (
+            {map(isMobile ? [0, 1, 2] : [0, 1, 2, 3], (value) => (
               <RecordCardSkeleton key={value} />
             ))}
           </Grid>
@@ -70,13 +68,13 @@ const Index = () => {
             <RecordCard key={i} record={record}></RecordCard>
           ))}
         </Grid>
-        <div style={{ height: mobile ? '100px' : '60px' }} />
+        <div style={{ height: isMobile ? '100px' : '60px' }} />
       </Grid>
     </Grid>
   );
 };
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async(context) => {
   const session = await getSession(context);
   return {
     props: { session },
