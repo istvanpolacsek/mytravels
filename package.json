@@ -1,0 +1,33 @@
+{
+  "name": "mytravels",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.7.1",
+    "@emotion/react": "^11.7.1",
+    "@emotion/server": "^11.4.0",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.2.5",
+    "@mui/styles": "^5.2.3",
+    "@next-auth/mongodb-adapter": "^1.0.1",
+    "@reduxjs/toolkit": "^1.7.1",
+    "lodash": "^4.17.21",
+    "mongodb": "^4.2.2",
+    "next": "12.0.7",
+    "next-auth": "^4.0.5",
+    "next-pwa": "^5.4.4",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-icons": "^4.3.1",
+    "react-redux": "^7.2.6"
+  },
+  "devDependencies": {
+    "eslint": "8.5.0",
+    "eslint-config-next": "12.0.7"
+  }
+}
