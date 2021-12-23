@@ -17,6 +17,7 @@ function ThemeContextWrapper({ children, emotionCache }) {
   const i = +useSelector(selectIsDarkModeActive);
 
   const theme = createTheme({
+    mixins: { toolbar: { minHeight: 44 } },
     palette: {
       mode: ['light', 'dark'][i],
       primary: { main: [primaryLight, primaryDark][i] },
@@ -24,8 +25,8 @@ function ThemeContextWrapper({ children, emotionCache }) {
       divider: [dividerLight, dividerDark][i],
     },
     components: {
-      MuiDrawer: { styleOverrides: { paper: { minHeight: '70vh' } } },
-      MuiTypography: { styleOverrides: { h5: { fontWeight: 'lighter' } } },
+      MuiDrawer: { styleOverrides: { paper: { minHeight: '60vh', borderRadius: '10px 10px 0 0' } } },
+      MuiTypography: { styleOverrides: { root: { fontWeight: 'lighter' } } },
       MuiBackdrop: { styleOverrides: { root: { backdropFilter: 'blur(10px)' } } },
       MuiAppBar: {
         styleOverrides: {

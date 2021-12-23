@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react';
 import withAuth from 'components/hocs/withAuth';
 
 function Home() {

@@ -8,6 +8,10 @@ export const ToolbarStyled = styled(Toolbar)`
   }
 `;
 
+export const MobileToolbar = styled(Toolbar)`
+  justify-content: space-between;
+`;
+
 export const DarkModeSwitchStyled = styled(Stack)`
   .MuiSwitch-root {
     z-index: 1500;

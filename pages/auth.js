@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useTheme } from '@mui/material';
 
 function Auth() {
-  const { palette: { primary, secondary, background } } = useTheme();
+  const { palette: { primary, secondary } } = useTheme();
 
   const AuthStyled = styled.div`
     width: 100vw;
