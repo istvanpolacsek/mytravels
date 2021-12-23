@@ -12,7 +12,7 @@ function SignIn() {
         <Grid item xs={12}>
           <Typography align="center">Please login using:</Typography>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={8}>
           <Button fullWidth variant="outlined" onClick={() => signIn('google')}>
             Google
           </Button>

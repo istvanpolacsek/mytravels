@@ -25,7 +25,7 @@ function ThemeContextWrapper({ children, emotionCache }) {
       divider: [dividerLight, dividerDark][i],
     },
     components: {
-      MuiDrawer: { styleOverrides: { paper: { minHeight: '60vh', borderRadius: '10px 10px 0 0' } } },
+      MuiDrawer: { styleOverrides: { paper: { borderRadius: '10px 10px 0 0' } } },
       MuiTypography: { styleOverrides: { root: { fontWeight: 'lighter' } } },
       MuiBackdrop: { styleOverrides: { root: { backdropFilter: 'blur(10px)' } } },
       MuiAppBar: {

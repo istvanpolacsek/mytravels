@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { SIGN_IN } from 'components/ActiveDialog/constants';
+import { PROFILE, SIGN_IN } from 'components/ActiveDialog/constants';
 
 const useRoutes = () => {
   const router = useRouter();
@@ -16,7 +16,12 @@ const useRoutes = () => {
     );
   };
 
-  return { toHomePage, toLoginPage };
+  const toProfilePage = async(rest) => {
+    await router.push({ pathname: '/', query: { dialog: PROFILE, ...rest } }, { shallow: true },
+    );
+  };
+
+  return { toHomePage, toLoginPage, toProfilePage };
 };
 
 export default useRoutes;
