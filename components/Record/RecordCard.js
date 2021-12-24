@@ -24,12 +24,12 @@ const RecordCard = ({
     <Grid item xs={12} sm={6} md={6}>
       <Card>
         <CardHeader
-          avatar={<Icon size={20} color={palette.text.secondary} />}
+          avatar={<Icon size={20} color={palette.primary.main} />}
           title={`${departurevicinity} - ${arrivalvicinity}`}
           subheader={new Intl.DateTimeFormat('en-GB').format(new Date(traveldate))}
           action={<>
-            <IconButton size="large"><RiEdit2Line size={20} /></IconButton>
-            <IconButton size="large"><RiDeleteBin7Line size={20} /></IconButton>
+            <IconButton color="secondary" size="large"><RiEdit2Line size={20} /></IconButton>
+            <IconButton color="secondary" size="large"><RiDeleteBin7Line size={20} /></IconButton>
           </>}
         />
         <CardMedia component="img" height={150} src={src} />

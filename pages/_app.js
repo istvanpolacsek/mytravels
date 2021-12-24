@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { includes } from 'lodash';
 import createCache from '@emotion/cache';
 import { CssBaseline } from '@mui/material';
@@ -10,12 +11,15 @@ const clientSideEmotionCache = createCache({ key: 'css' });
 
 function App({ Component, emotionCache = clientSideEmotionCache, pageProps, session, ...restProps }) {
   return (
-    <ContextWrapper emotionCache={emotionCache} session={session}>
-      <CssBaseline />
-      <ActiveDialog {...restProps} />
-      <Navigation {...restProps} />
-      <Component {...pageProps} {...restProps} />
-    </ContextWrapper>
+    <>
+      <Head><title>My Travels</title></Head>
+      <ContextWrapper emotionCache={emotionCache} session={session}>
+        <CssBaseline />
+        <ActiveDialog {...restProps} />
+        <Navigation {...restProps} />
+        <Component {...pageProps} {...restProps} />
+      </ContextWrapper>
+    </>
   );
 }
 
