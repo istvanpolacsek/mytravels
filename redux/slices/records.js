@@ -3,7 +3,7 @@ import { assign } from 'lodash';
 
 const recordsSlice = createSlice({
   name: 'records',
-  initialState: { filter: 'all' },
+  initialState: { filter: 'All' },
   reducers: {
     setFilter(state, { payload }) {
       assign(state, payload);

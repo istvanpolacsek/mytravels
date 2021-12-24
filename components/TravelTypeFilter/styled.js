@@ -7,5 +7,4 @@ export const CenteredToolbarStyled = styled(Toolbar)`
 
 export const TravelTypeFilterStyled = styled(AppBar)`
   top: ${({ theme }) => theme.mixins.toolbar.minHeight}px;
-  z-index: 1000;
 `;

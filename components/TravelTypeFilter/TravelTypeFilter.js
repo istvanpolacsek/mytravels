@@ -23,7 +23,7 @@ function TravelTypeFilter() {
         <Container>
           <CenteredToolbarStyled>
             <ToggleButtonGroup exclusive value={filter} onChange={handleFilterChange}>
-              <ToggleButton value="all">
+              <ToggleButton value="All">
                 <CgInfinity />
               </ToggleButton>
               {map(TRAVEL_TYPES, ({ key, activeIcon: ActiveIcon, passiveIcon: PassiveIcon }) => (

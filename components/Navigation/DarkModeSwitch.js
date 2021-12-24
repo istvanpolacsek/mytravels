@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch } from '@mui/material';
-import { BsMoon, BsSun } from 'react-icons/bs';
+import { RiMoonLine, RiSunLine } from 'react-icons/ri';
 
 import { selectIsDarkModeActive, toggleColorMode } from 'redux/slices/settings';
 import { DarkModeSwitchStyled } from 'components/Navigation/styled';
@@ -18,9 +18,9 @@ function DarkModeSwitch() {
 
   return (
     <DarkModeSwitchStyled direction="row" alignItems="center">
-      <BsSun />
+      <RiSunLine />
       <Switch {...props} />
-      <BsMoon />
+      <RiMoonLine />
     </DarkModeSwitchStyled>
   );
 }

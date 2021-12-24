@@ -1,12 +1,12 @@
-import { reduce } from 'lodash';
+import { concat } from 'lodash';
 import { configureStore } from '@reduxjs/toolkit';
 
-import * as reducers from 'redux/index';
+import reducer from 'redux/index';
+import { recordsApi } from 'redux/services/recordsService';
 
-const reducer = reduce(reducers, (acc, reducer, name) => {
-  return { ...acc, [name]: reducer };
-}, {});
+const { middleware: recordsApiMiddleware } = recordsApi;
 
 export default configureStore({
   reducer,
+  middleware: (getDefaultMiddleware) => concat(getDefaultMiddleware(), recordsApiMiddleware),
 });

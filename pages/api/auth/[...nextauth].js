@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
+
 import clientPromise from 'lib/mongo/db';
 
 export default NextAuth({
@@ -12,7 +13,7 @@ export default NextAuth({
   session: { jwt: true },
   callbacks: {
     async session({ session, user }) {
-      session.user.id = user.id;
+      session.user.id = user?.legacyId || user.id;
 
       return session;
     },

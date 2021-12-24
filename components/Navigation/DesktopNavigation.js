@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { IconButton } from '@mui/material';
 import { RiAddCircleLine, RiBarChartLine } from 'react-icons/ri';
 
@@ -13,4 +14,4 @@ function DesktopNavigation() {
   );
 }
 
-export default DesktopNavigation;
+export default memo(DesktopNavigation);

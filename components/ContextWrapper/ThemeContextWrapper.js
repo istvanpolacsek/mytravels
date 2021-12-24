@@ -25,6 +25,14 @@ function ThemeContextWrapper({ children, emotionCache }) {
       divider: [dividerLight, dividerDark][i],
     },
     components: {
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            borderRadius: 0,
+            boxShadow: [`inset 1px 1px ${dividerLight}, inset -1px -1px ${dividerLight}`, 'unset'][i],
+          },
+        },
+      },
       MuiDrawer: { styleOverrides: { paper: { borderRadius: '10px 10px 0 0' } } },
       MuiTypography: { styleOverrides: { root: { fontWeight: 'lighter' } } },
       MuiBackdrop: { styleOverrides: { root: { backdropFilter: 'blur(10px)' } } },

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Container, IconButton } from '@mui/material';
 import { RiAddCircleLine, RiBarChartLine } from 'react-icons/ri';
 
@@ -6,7 +7,7 @@ import { MobileToolbar } from 'components/Navigation/styled';
 
 function MobileNavigation() {
   return (
-    <Container disableGutters>
+    <Container disableGutters maxWidth="sm">
       <MobileToolbar>
         <IconButton><RiBarChartLine /></IconButton>
         <IconButton><RiAddCircleLine /></IconButton>
@@ -16,4 +17,4 @@ function MobileNavigation() {
   );
 }
 
-export default MobileNavigation;
+export default memo(MobileNavigation);
