@@ -49,7 +49,7 @@ function ThemeContextWrapper({ children, emotionCache }) {
         },
       },
       MuiDialogTitle: { styleOverrides: { root: { padding: '16px 8px' } } },
-      MuiDrawer: { styleOverrides: { paper: { borderRadius: '10px 10px 0 0' } } },
+      MuiDrawer: { styleOverrides: { paper: { borderRadius: '10px 10px 0 0', paddingBottom: 15 } } },
       MuiTypography: { styleOverrides: { root: { fontWeight: 'lighter' } } },
       MuiButton: { defaultProps: { variant: 'outlined' } },
       MuiLoadingButton: { defaultProps: { variant: 'outlined' } },

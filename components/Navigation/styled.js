@@ -9,6 +9,7 @@ export const ToolbarStyled = styled(Toolbar)`
 `;
 
 export const MobileToolbar = styled(Toolbar)`
+  margin-bottom: 15px;
   justify-content: space-between;
 `;
 
