@@ -7,6 +7,31 @@ import createEmotionServer from '@emotion/server/create-instance';
 import { backgroundDark } from 'components/ContextWrapper/ThemeContextWrapper';
 
 class CustomDocument extends Document {
+  static async getInitialProps(ctx) {
+    const originalRenderPage = ctx.renderPage;
+    const cache = createCache({ key: 'css' });
+    const { extractCriticalToChunks } = createEmotionServer(cache);
+
+    ctx.renderPage = () =>
+      originalRenderPage({
+        enhanceApp: (App) =>
+          function EnhanceApp(props) {
+            return <App emotionCache={cache} {...props} />;
+          },
+      });
+
+    const initialProps = await Document.getInitialProps(ctx);
+    const { styles } = extractCriticalToChunks(initialProps.html);
+    const emotionStyleTags = map(styles, ({ key, ids, css }) => (
+      <style data-emotion={`${key} ${ids.join(' ')}`} key={key} dangerouslySetInnerHTML={{ __html: css }} />
+    ));
+
+    return {
+      ...initialProps,
+      styles: [...emotionStyleTags, ...React.Children.toArray(initialProps.styles)],
+    };
+  }
+
   render() {
     return (
       <Html lang="en">
@@ -74,28 +99,3 @@ class CustomDocument extends Document {
 }
 
 export default CustomDocument;
-
-CustomDocument.getInitialProps = async(ctx) => {
-  const originalRenderPage = ctx.renderPage;
-  const cache = createCache({ key: 'css' });
-  const { extractCriticalToChunks } = createEmotionServer(cache);
-
-  ctx.renderPage = () =>
-    originalRenderPage({
-      enhanceApp: (App) =>
-        function EnhanceApp(props) {
-          return <App emotionCache={cache} {...props} />;
-        },
-    });
-
-  const initialProps = await Document.getInitialProps(ctx);
-  const { styles } = extractCriticalToChunks(initialProps.html);
-  const emotionStyleTags = map(styles, ({ key, ids, css }) => (
-    <style data-emotion={`${key} ${ids.join(' ')}`} key={key} dangerouslySetInnerHTML={{ __html: css }} />
-  ));
-
-  return {
-    ...initialProps,
-    styles: [...emotionStyleTags, ...React.Children.toArray(initialProps.styles)],
-  };
-};

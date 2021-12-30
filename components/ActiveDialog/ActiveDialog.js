@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 import { useRouter } from 'next/router';
 import { Dialog, Fade, SwipeableDrawer } from '@mui/material';
 
@@ -30,4 +30,4 @@ function ActiveDialog({ isMobile }) {
   </DialogComponent>;
 }
 
-export default ActiveDialog;
+export default memo(ActiveDialog);
