@@ -1,70 +1,36 @@
-import {
-  RECORD_DELETE,
-  RECORD_FORM,
-  RECORD_STATS,
-  SIGN_IN,
-} from 'components/ActiveDialog/constants';
 import { useRouter } from 'next/router';
+
+import { DELETE_RECORD, EDIT_RECORD, PROFILE, SIGN_IN } from 'components/ActiveDialog/constants';
 
 const useRoutes = () => {
   const router = useRouter();
-  const pathname = '/';
 
-  const toHomePage = () => {
-    router.push({ pathname });
+  const toHomePage = async() => {
+    await router.push({ pathname: '/' });
   };
 
-  const toSignIn = () => {
-    router.push({
-      pathname,
-      query: { dialogName: SIGN_IN },
-    });
+  const toLoginPage = async(rest) => {
+    await router.push(
+      { pathname: '/auth', query: { dialog: SIGN_IN, ...rest } },
+      '/',
+      { shallow: true },
+    );
   };
 
-  const toSignInPage = () => {
-    router.push({
-      pathname: '/signin',
-    });
+  const toProfilePage = async(rest) => {
+    await router.push({ pathname: '/', query: { dialog: PROFILE, ...rest } }, '/profile', { shallow: true },
+    );
   };
 
-  const toRecordForm = (recordid) => {
-    router.push({
-      pathname,
-      query: {
-        dialogName: RECORD_FORM,
-        dialogWidth: 'sm',
-        ...(recordid ? { recordid } : {}),
-      },
-    });
+  const toEditRecord = async(rest) => {
+    await router.push({ pathname: '/', query: { dialog: EDIT_RECORD, width: 'sm', ...rest } }, '/', { shallow: true });
   };
 
-  const toRecordDelete = (recordid) => {
-    router.push({
-      pathname,
-      query: {
-        dialogName: RECORD_DELETE,
-        recordid,
-      },
-    });
+  const toDeleteRecord = async(rest) => {
+    await router.push({ pathname: '/', query: { dialog: DELETE_RECORD, ...rest } }, '/', { shallow: true });
   };
 
-  const toRecordStats = () => {
-    router.push({
-      pathname,
-      query: {
-        dialogName: RECORD_STATS,
-      },
-    });
-  };
-
-  return {
-    toHomePage,
-    toRecordDelete,
-    toRecordForm,
-    toRecordStats,
-    toSignIn,
-    toSignInPage,
-  };
+  return { toHomePage, toLoginPage, toProfilePage, toEditRecord, toDeleteRecord };
 };
 
 export default useRoutes;

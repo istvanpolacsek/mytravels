@@ -1,56 +1,42 @@
-import { memo, useContext } from 'react';
+import { memo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { map } from 'lodash';
-import AppBar from '@material-ui/core/AppBar';
-import Box from '@material-ui/core/Box';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Paper from '@material-ui/core/Paper';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import AllInclusive from '@material-ui/icons/AllInclusive';
+import { Container, Slide, ToggleButton, ToggleButtonGroup, useScrollTrigger } from '@mui/material';
+import { CgInfinity } from 'react-icons/cg';
 
-import { TravelTypes } from 'utils/traveltypes';
-import { StateContext } from 'components/ContextWrapper/ContextWrapper';
+import { selectFilter, setFilter } from 'redux/slices/records';
+import { TRAVEL_TYPES } from 'lib/constants';
+import { CenteredToolbarStyled, TravelTypeFilterStyled } from 'components/TravelTypeFilter/styled';
 
-const TraveTypeFilter = ({ value, handleChange }) => {
-  const { isMobile } = useContext(StateContext);
+function TravelTypeFilter() {
+  const dispatch = useDispatch();
+  const trigger = useScrollTrigger();
+  const filter = useSelector(selectFilter);
 
-  const FilterControl = () => {
-    return (
-      <FormControl>
-        <RadioGroup row value={value} onChange={handleChange}>
-          <FormControlLabel
-            labelPlacement="top"
-            value=""
-            control={<Radio color="primary" />}
-            label={<AllInclusive color="secondary" />}
-          />
-          {map(TravelTypes, (props) => (
-            <FormControlLabel
-              {...props}
-              labelPlacement="top"
-              control={<Radio color="primary" />}
-            />
-          ))}
-        </RadioGroup>
-      </FormControl>
-    );
+  const handleFilterChange = (event, newFilter) => {
+    dispatch(setFilter({ filter: newFilter }));
   };
 
-  return isMobile ? (
-    <FilterControl />
-  ) : (
-    <AppBar fixed="true" style={{ top: 'auto', bottom: 0 }}>
-      <Paper
-        elevation={5}
-        style={{ position: 'absolute', top: 'auto', bottom: 45, left: 60 }}
-      >
-        <Box m={1}>
-          <FilterControl />
-        </Box>
-      </Paper>
-    </AppBar>
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      <TravelTypeFilterStyled component="div" color="transparent">
+        <Container>
+          <CenteredToolbarStyled>
+            <ToggleButtonGroup exclusive value={filter} onChange={handleFilterChange}>
+              <ToggleButton value="All">
+                <CgInfinity />
+              </ToggleButton>
+              {map(TRAVEL_TYPES, ({ key, activeIcon: ActiveIcon, passiveIcon: PassiveIcon }) => (
+                <ToggleButton value={key} key={key}>
+                  {filter === key ? <ActiveIcon /> : <PassiveIcon />}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+          </CenteredToolbarStyled>
+        </Container>
+      </TravelTypeFilterStyled>
+    </Slide>
   );
-};
+}
 
-export default memo(TraveTypeFilter);
+export default memo(TravelTypeFilter);

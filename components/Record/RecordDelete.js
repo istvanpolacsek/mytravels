@@ -1,101 +1,52 @@
-import { Fragment } from 'react';
-import { CheckCircle, Cancel, Close } from '@material-ui/icons';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import IconButtonWrapper from 'components/IconButtonWrapper/IconButtonWrapper';
-import useRoutes from 'hooks/useRoutes';
-import { DialogContent, Grid, Typography } from '@material-ui/core';
-import { useSWRConfig } from 'swr';
+import { memo } from 'react';
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { Formik } from 'formik';
-import useUserData from 'hooks/useUserData';
-import { filter } from 'lodash';
+import { map } from 'lodash';
+import { ButtonGroup, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { RiCloseLine, RiDeleteBin7Line } from 'react-icons/ri';
 
-const performMutation = async (id) => {
-  const response = await fetch(`/api/travelrecords/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response) {
-    throw new Error('Network Error while performing mutation');
-  }
-  return response.json();
-};
+import useRoutes from 'hooks/useRoutes';
+import { recordsApi } from 'redux/services/recordsService';
 
-const RecordDelete = () => {
-  const router = useRouter();
-  const { mutate } = useSWRConfig();
-  const { data, url } = useUserData();
+const { endpoints } = recordsApi;
+
+function RecordDelete() {
   const { toHomePage } = useRoutes();
+  const { query: { id } } = useRouter();
+  const [deleteRecord] = endpoints.deleteRecord.useMutation();
+  const { formState: { isSubmitting }, handleSubmit } = useForm({ mode: 'onChange' });
 
-  const recordid = router.query?.recordid;
-
-  const handleFormSubmit = async () => {
-    const updatedData = filter(data, ({ _id }) => {
-      return _id !== recordid;
-    });
-
-    mutate(url, updatedData, false);
-
-    await performMutation(recordid);
-
-    mutate(url);
-
+  const handleFormSubmit = () => {
+    deleteRecord(id);
     toHomePage();
   };
 
-  return (
-    <Fragment>
-      <DialogTitle>
-        <Grid container alignItems="center" justify="space-between">
-          <span>Delete Record</span>
-          <IconButtonWrapper title="close" onClick={toHomePage}>
-            <Close />
-          </IconButtonWrapper>
-        </Grid>
-      </DialogTitle>
-      <DialogContent>
-        <Formik onSubmit={handleFormSubmit} initialValues={{}}>
-          {({ handleSubmit, isSubmitting }) => (
-            <Grid
-              container
-              direction="column"
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-            >
-              <Typography>Confirm Delete</Typography>
-              {isSubmitting && <LinearProgress />}
-              <DialogActions>
-                <ButtonGroup>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    startIcon={<CheckCircle />}
-                    disabled={isSubmitting}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={toHomePage}
-                    startIcon={<Cancel />}
-                    disabled={isSubmitting}
-                  >
-                    Cancel
-                  </Button>
-                </ButtonGroup>
-              </DialogActions>
-            </Grid>
-          )}
-        </Formik>
-      </DialogContent>
-    </Fragment>
-  );
-};
+  const actions = [
+    { title: 'Cancel', onClick: () => toHomePage(), disabled: isSubmitting, startIcon: <RiCloseLine /> },
+    {
+      title: 'Delete',
+      type: 'submit',
+      color: 'error',
+      disabled: isSubmitting,
+      loading: isSubmitting,
+      startIcon: <RiDeleteBin7Line />,
+    },
+  ];
 
-export default RecordDelete;
+  return (
+    <DialogContent>
+      <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogActions disableSpacing>
+          <ButtonGroup fullWidth>
+            {map(actions, ({ title, ...rest }, i) => (
+              <LoadingButton key={i} variant="outlined" {...rest}>{title}</LoadingButton>))}
+          </ButtonGroup>
+        </DialogActions>
+      </form>
+    </DialogContent>
+  );
+}
+
+export default memo(RecordDelete);

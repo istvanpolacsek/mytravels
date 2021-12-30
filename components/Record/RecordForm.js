@@ -1,193 +1,110 @@
-import { Fragment, useContext } from 'react';
-import { useSession } from 'next-auth/client';
+import { memo, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import { useRouter } from 'next/router';
-import { useSWRConfig } from 'swr';
-import { Formik } from 'formik';
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  LinearProgress,
-} from '@material-ui/core';
-import { Save, Cancel, Close } from '@material-ui/icons';
+import { find, map } from 'lodash';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ButtonGroup, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField } from '@mui/material';
+import { DatePicker, LoadingButton } from '@mui/lab';
+import { RiCloseLine, RiSaveLine } from 'react-icons/ri';
 
-import IconButtonWrapper from 'components/IconButtonWrapper/IconButtonWrapper';
-import FormikDatePicker from 'components/FormikPickers/FormikDatePicker';
-import FormikPlacesAutocomplete from 'components/FormikPickers/FormikPlacesAutocomplete';
-import FormikTypePicker from 'components/FormikPickers/FormikTypePicker';
-import RecordNewSchema from 'models/yup/recordnew';
 import useRoutes from 'hooks/useRoutes';
-import useUserData from 'hooks/useUserData';
-import { filter, find } from 'lodash';
-import RecordEditSchema from 'models/yup/recordedit';
-import { StateContext } from 'components/ContextWrapper/ContextWrapper';
+import { recordsApi } from 'redux/services/recordsService';
+import { selectFilter } from 'redux/slices/records';
+import RecordNewSchema from 'lib/yup/models/RecordNew';
+import RecordEditSchema from 'lib/yup/models/RecordEdit';
+import { ARRIVAL_ID, CREATE_DEFAULTS, DEPARTURE_ID, TRAVEL_DATE, TRAVEL_TYPE, TRAVEL_TYPES } from 'lib/constants';
+import PlacesAutocomplete from 'components/Pickers/PlacesAutocomplete';
 
-const fieldStyle = { marginLeft: 0, marginRight: 0 };
+const { endpoints } = recordsApi;
 
-const performMutation = async(record, id) => {
-  const url = id ? `/api/travelrecords/${id}` : '/api/travelrecords/';
-  const method = id ? 'PUT' : 'POST';
-
-  const response = await fetch(url, {
-    method,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(record),
-  });
-  if (!response) {
-    throw new Error('Network Error while performing mutation');
-  }
-
-  return response.json();
-};
-
-const RecordForm = () => {
-  const router = useRouter();
-  const [session] = useSession();
-  const {
-    user: { id },
-  } = session;
-  const { isMobile } = useContext(StateContext);
-  const { mutate } = useSWRConfig();
-  const { data, url } = useUserData();
+function RecordForm() {
+  const { query } = useRouter();
   const { toHomePage } = useRoutes();
+  const filter = useSelector(selectFilter);
+  const id = query?.id;
 
-  const recordid = router.query?.recordid;
+  const [createRecord] = endpoints.createRecord.useMutation();
+  const [updateRecord] = endpoints.updateRecord.useMutation();
 
-  const handleFormSubmit = async(values) => {
-    if (recordid) {
-      const updatedRecord = { ...find(data, { _id: recordid }), ...values };
-      const updatedData = [
-        updatedRecord,
-        ...filter(data, ({ _id }) => {
-          return _id !== recordid;
-        }),
-      ];
-      mutate(url, updatedData, false);
-      await performMutation(updatedRecord, recordid);
-    } else {
-      const newRecord = { userid: id, ...values };
-      const newData = [newRecord, ...data];
-      mutate(url, newData, false);
-      await performMutation(newRecord);
-    }
+  const selectRecord = useMemo(() => createSelector(
+    (res) => res.data,
+    (res, recordId) => recordId,
+    (data, recordId) => find(data, { _id: recordId }),
+  ), []);
 
-    mutate(url);
+  const { selectedRecord } = endpoints.retrieveRecords.useQuery({ filter }, {
+    selectFromResult: (res) => ({ selectedRecord: selectRecord(res, id) }),
+  });
 
+  const { control, formState: { isSubmitting, isValid }, getValues, handleSubmit, watch } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(id ? RecordEditSchema : RecordNewSchema),
+    defaultValues: id ? selectedRecord : CREATE_DEFAULTS,
+  });
+
+  const actions = [
+    { title: 'Cancel', onClick: () => toHomePage(), disabled: isSubmitting, startIcon: <RiCloseLine /> },
+    {
+      title: id ? 'Save' : 'Create',
+      type: 'submit',
+      disabled: !isValid || isSubmitting,
+      loading: isSubmitting,
+      startIcon: <RiSaveLine />,
+    },
+  ];
+
+  const handleFormSubmit = () => {
+    const submitAction = [createRecord, updateRecord][+!!id];
+
+    submitAction(getValues());
     toHomePage();
   };
 
-  return (
-    <Fragment>
-      <DialogTitle>
-        <Grid
-          container
-          alignItems="center"
-          justify="space-between"
-        >
-          <span>{recordid ? 'Edit' : 'New'} Record</span>
-          <IconButtonWrapper title="close" onClick={toHomePage}>
-            <Close />
-          </IconButtonWrapper>
-        </Grid>
-      </DialogTitle>
-      <DialogContent>
-        <Formik
-          onSubmit={handleFormSubmit}
-          validationSchema={recordid ? RecordEditSchema : RecordNewSchema}
-          initialValues={recordid ? find(data, { _id: recordid }) : {}}
-        >
-          {({ handleSubmit, errors, isSubmitting }) => (
-            <Grid
-              container
-              direction="column"
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-            >
-              <Grid
-                container
-                direction={isMobile ? 'column' : 'row'}
-                justify="space-between"
-              >
-                <Box m={1} width={isMobile ? '100%' : '48%'} style={fieldStyle}>
-                  <FormikDatePicker
-                    name="traveldate"
-                    label={
-                      errors.traveldate ? `Date | ${errors.traveldate}` : 'Date'
-                    }
-                    error={!!errors.traveldate}
-                    disabled={isSubmitting}
-                  />
-                </Box>
-                <Box m={1} width={isMobile ? '100%' : '48%'} style={fieldStyle}>
-                  <FormikTypePicker
-                    name="traveltype"
-                    label={
-                      errors.traveltype ? `Type | ${errors.traveltype}` : 'Type'
-                    }
-                    error={!!errors.traveltype}
-                    disabled={isSubmitting}
-                  />
-                </Box>
-              </Grid>
-              {!recordid && (
-                <Fragment>
-                  <Box m={1} width="100%" style={fieldStyle}>
-                    <FormikPlacesAutocomplete
-                      name="departureid"
-                      label="Departure"
-                      placeholder="Budapest..."
-                      error={!!errors.departureid}
-                      disabled={isSubmitting}
-                    />
-                  </Box>
-                  <Box m={1} width="100%" style={fieldStyle}>
-                    <FormikPlacesAutocomplete
-                      name="arrivalid"
-                      label="Arrival"
-                      placeholder="Barcelona..."
-                      error={!!errors.arrivalid}
-                      disabled={isSubmitting}
-                    />
-                  </Box>
-                </Fragment>
-              )}
-              {isSubmitting && <LinearProgress />}
-              <DialogActions>
-                <ButtonGroup>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<Save />}
-                    type="submit"
-                    disabled={isSubmitting}
-                  >
-                    save
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<Cancel />}
-                    onClick={toHomePage}
-                    disabled={isSubmitting}
-                  >
-                    cancel
-                  </Button>
-                </ButtonGroup>
-              </DialogActions>
-            </Grid>
-          )}
-        </Formik>
-      </DialogContent>
-    </Fragment>
-  );
-};
+  const fields = [
+    {
+      name: TRAVEL_DATE,
+      render: ({ field }) => (<DatePicker {...field} renderInput={(params) =>
+        (<TextField fullWidth size="small" {...params} />)} label="Travel Date" />),
+    },
+    {
+      name: TRAVEL_TYPE,
+      render: ({ field }) => (<TextField select fullWidth size="small" label="Travel Type" {...field} >
+        {map(TRAVEL_TYPES, ({ key }) => <MenuItem value={key} key={key}>{key}</MenuItem>)}
+      </TextField>),
+    },
+    ...(id ? [] : [{
+      name: DEPARTURE_ID,
+      render: ({ field: { value, onChange } }) => (
+        <PlacesAutocomplete label="Departure City" value={value} onChange={onChange} />),
+    }]),
+    ...(id ? [] : [{
+      name: ARRIVAL_ID,
+      render: ({ field: { value, onChange } }) => (
+        <PlacesAutocomplete label="Arrival City" value={value} onChange={onChange} />),
+    }]),
+  ];
 
-export default RecordForm;
+  return (
+    <DialogContent>
+      <DialogTitle>{`${id ? 'Edit' : 'New'} Travel`}</DialogTitle>
+      <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <Grid container spacing={2} my={1} >
+          {map(fields, (props, i) => (
+            <Grid key={i} item xs={12} sm={6}>
+              <Controller control={control} {...props} />
+            </Grid>))}
+        </Grid>
+        <DialogActions>
+          <ButtonGroup fullWidth>
+            {map(actions, ({ title, ...rest }, i) => (
+              <LoadingButton key={i} {...rest}>{title}</LoadingButton>))}
+          </ButtonGroup>
+        </DialogActions>
+      </form>
+    </DialogContent>
+  );
+}
+
+export default memo(RecordForm);

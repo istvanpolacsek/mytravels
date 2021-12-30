@@ -1,4 +1,4 @@
-export const SIGN_IN = 'SignIn';
-export const RECORD_FORM = 'RecordForm';
-export const RECORD_DELETE = 'RecordDelete';
-export const RECORD_STATS = 'RecordStats';
+export const SIGN_IN = 'login';
+export const PROFILE = 'profile';
+export const DELETE_RECORD = 'deleteRecord';
+export const EDIT_RECORD = 'editRecord';
