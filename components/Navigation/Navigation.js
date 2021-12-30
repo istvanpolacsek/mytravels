@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import Link from 'next/Link';
+import Link from 'next/link';
 import { AppBar, Container, Typography } from '@mui/material';
 
 import DarkModeSwitch from 'components/Navigation/DarkModeSwitch';
