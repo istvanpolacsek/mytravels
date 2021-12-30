@@ -11,6 +11,8 @@ export const secondaryLight = '#ef6c00';
 export const secondaryDark = '#ffcc80';
 export const dividerLight = 'rgba(0,0,0,0.12)';
 export const dividerDark = 'rgba(255,255,255,0.12)';
+export const backgroundLight = '#ffffff';
+export const backgroundDark = '#121212';
 
 function ThemeContextWrapper({ children, emotionCache }) {
   const dispatch = useDispatch();
@@ -25,17 +27,6 @@ function ThemeContextWrapper({ children, emotionCache }) {
       divider: [dividerLight, dividerDark][i],
     },
     components: {
-      MuiCard: {
-        styleOverrides: {
-          root: {
-            borderRadius: 0,
-            boxShadow: [`inset 1px 1px ${dividerLight}, inset -1px -1px ${dividerLight}`, 'unset'][i],
-          },
-        },
-      },
-      MuiDrawer: { styleOverrides: { paper: { borderRadius: '10px 10px 0 0' } } },
-      MuiTypography: { styleOverrides: { root: { fontWeight: 'lighter' } } },
-      MuiBackdrop: { styleOverrides: { root: { backdropFilter: 'blur(10px)' } } },
       MuiAppBar: {
         styleOverrides: {
           colorTransparent: {
@@ -44,6 +35,24 @@ function ThemeContextWrapper({ children, emotionCache }) {
           },
         },
       },
+      MuiBackdrop: { styleOverrides: { root: { backdropFilter: 'blur(10px)' } } },
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            '@media(max-width: 600px)': {
+              borderRadius: 0,
+              border: 'unset',
+              borderTop: `1px solid ${[dividerLight, dividerDark][i]}`,
+              borderBottom: `1px solid ${[dividerLight, dividerDark][i]}`,
+            },
+          },
+        },
+      },
+      MuiDialogTitle: { styleOverrides: { root: { padding: '16px 8px' } } },
+      MuiDrawer: { styleOverrides: { paper: { borderRadius: '10px 10px 0 0' } } },
+      MuiTypography: { styleOverrides: { root: { fontWeight: 'lighter' } } },
+      MuiButton: { defaultProps: { variant: 'outlined' } },
+      MuiLoadingButton: { defaultProps: { variant: 'outlined' } },
     },
   });
 

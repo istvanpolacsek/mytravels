@@ -3,7 +3,7 @@ import { assign } from 'lodash';
 
 const settingsSlice = createSlice({
   name: 'settings',
-  initialState: { darkMode: true },
+  initialState: { darkMode: true, loading: false },
   reducers: {
     getColorMode(state) {
       const darkMode = localStorage.getItem('darkMode') === 'true';
@@ -16,14 +16,22 @@ const settingsSlice = createSlice({
       localStorage.setItem('darkMode', darkMode);
       assign(state, payload);
     },
+    toggleLoadingState(state, { payload }) {
+      assign(state, payload);
+    },
   },
 });
 
-export const { getColorMode, toggleColorMode } = settingsSlice.actions;
+export const { getColorMode, toggleColorMode, toggleLoadingState } = settingsSlice.actions;
 
 export const selectIsDarkModeActive = createDraftSafeSelector(
   (state) => state,
   ({ settings }) => settings.darkMode,
+);
+
+export const selectIsGlobalLoading = createDraftSafeSelector(
+  (state) => state,
+  ({ settings }) => settings.loading,
 );
 
 export default settingsSlice.reducer;

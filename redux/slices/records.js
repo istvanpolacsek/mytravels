@@ -1,5 +1,9 @@
-import { createDraftSafeSelector, createSlice } from '@reduxjs/toolkit';
+import { createDraftSafeSelector, createSelector, createSlice } from '@reduxjs/toolkit';
 import { assign } from 'lodash';
+
+import { recordsApi } from 'redux/services/recordsService';
+
+const { endpoints } = recordsApi;
 
 const recordsSlice = createSlice({
   name: 'records',

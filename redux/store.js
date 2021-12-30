@@ -8,5 +8,7 @@ const { middleware: recordsApiMiddleware } = recordsApi;
 
 export default configureStore({
   reducer,
-  middleware: (getDefaultMiddleware) => concat(getDefaultMiddleware(), recordsApiMiddleware),
+  middleware: (getDefaultMiddleware) => concat(getDefaultMiddleware({
+    serializableCheck: false,
+  }), recordsApiMiddleware),
 });

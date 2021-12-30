@@ -11,11 +11,13 @@ const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigato
 const TransitionComponent = forwardRef(({ children, ...rest }, ref) =>
   <Fade ref={ref} {...rest} {...transitionProps}>{children}</Fade>);
 
+TransitionComponent.displayName = 'TransitionComponent';
+
 function ActiveDialog({ isMobile }) {
-  const { query, width } = useRouter();
+  const { query } = useRouter();
   const { toHomePage } = useRoutes();
 
-  const { dialog } = query;
+  const { dialog, width } = query;
   const Content = contents[dialog];
   const DialogComponent = [Dialog, SwipeableDrawer][+isMobile];
   const props = [
@@ -27,6 +29,5 @@ function ActiveDialog({ isMobile }) {
     {Content && <Content />}
   </DialogComponent>;
 }
-
 
 export default ActiveDialog;

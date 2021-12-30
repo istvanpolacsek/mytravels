@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { Button, DialogContent, Grid, Typography } from '@mui/material';
 import { signIn } from 'next-auth/react';
+import { Button, DialogContent, Grid, Typography } from '@mui/material';
 
 function SignIn() {
   return (

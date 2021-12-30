@@ -4,7 +4,7 @@ import { map } from 'lodash';
 import createCache from '@emotion/cache';
 import createEmotionServer from '@emotion/server/create-instance';
 
-import { primaryLight } from 'components/ContextWrapper/ThemeContextWrapper';
+import { backgroundDark, primaryLight } from 'components/ContextWrapper/ThemeContextWrapper';
 
 class CustomDocument extends Document {
   render() {
@@ -15,7 +15,7 @@ class CustomDocument extends Document {
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="application-name" content="My Travels" />
           <meta name="msapplication-starturl" content="/" />
-          <meta name="msapplication-navbutton-color" content={primaryLight} />
+          <meta name="msapplication-navbutton-color" content={backgroundDark} />
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
           <link rel="manifest" href="manifest.json" />
           <link rel="icon" type="image/svg+xml" href="/logo.svg" />

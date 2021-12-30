@@ -1,11 +1,24 @@
 import { memo } from 'react';
-import { Card, CardContent, CardHeader, CardMedia, Grid, IconButton, Typography, useTheme } from '@mui/material';
-import { find } from 'lodash';
+import Image from 'next/image';
+import { find, map } from 'lodash';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Grid,
+  IconButton,
+  Skeleton,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { RiDeleteBin7Line, RiEdit2Line } from 'react-icons/ri';
 
+import useRoutes from 'hooks/useRoutes';
 import { TRAVEL_TYPES } from 'lib/constants';
 
 const RecordCard = ({
+  _id: id,
   arrivalgeom,
   arrivalphoto,
   arrivalvicinity,
@@ -16,27 +29,36 @@ const RecordCard = ({
   traveltype = 'Plane',
 }) => {
   const { passiveIcon: Icon } = find(TRAVEL_TYPES, { key: traveltype });
-  const src = `data:${arrivalphoto.mime};base64,${Buffer.from(arrivalphoto.data.data).toString('base64')}`;
-  const distance = getDistance(departuregeom.coordinates, arrivalgeom.coordinates);
+  const src = arrivalphoto
+    ? `data:${arrivalphoto.mime};base64,${Buffer.from(arrivalphoto.data.data).toString('base64')}`
+    : undefined;
+  const distance = departuregeom && arrivalgeom
+    ? getDistance(departuregeom.coordinates, arrivalgeom.coordinates)
+    : undefined;
   const { palette } = useTheme();
+  const { toEditRecord, toDeleteRecord } = useRoutes();
+
+  const actions = [{ icon: RiEdit2Line, action: toEditRecord }, { icon: RiDeleteBin7Line, action: toDeleteRecord }];
 
   return (
     <Grid item xs={12} sm={6} md={6}>
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           avatar={<Icon size={20} color={palette.primary.main} />}
-          title={`${departurevicinity} - ${arrivalvicinity}`}
+          title={departurevicinity && arrivalvicinity ? `${departurevicinity} - ${arrivalvicinity}` : <Skeleton />}
           subheader={new Intl.DateTimeFormat('en-GB').format(new Date(traveldate))}
-          action={<>
-            <IconButton color="secondary" size="large"><RiEdit2Line size={20} /></IconButton>
-            <IconButton color="secondary" size="large"><RiDeleteBin7Line size={20} /></IconButton>
-          </>}
+          action={map(actions, ({ icon: Icon, action }, i) =>
+            (<IconButton key={i} size="large" onClick={() => action({ id })}><Icon size={20} /></IconButton>))}
         />
-        <CardMedia component="img" height={150} src={src} />
+        <CardMedia sx={{ position: 'relative', height: 150 }}>
+          {src
+            ? <Image layout="fill" objectFit="cover" alt={traveldate} src={src} />
+            : <Skeleton variant="rectangular" height={150} />}
+        </CardMedia>
         <CardContent>
           <Grid container justifyContent="space-between">
             <Typography>Distance:</Typography>
-            <Typography>{`${distance.toFixed(0)} km`}</Typography>
+            <Typography>{distance ? `${distance.toFixed(0)} km` : <Skeleton />}</Typography>
           </Grid>
         </CardContent>
       </Card>

@@ -1,15 +1,16 @@
 import { memo } from 'react';
-import { IconButton } from '@mui/material';
-import { RiAddCircleLine, RiBarChartLine } from 'react-icons/ri';
+import { map } from 'lodash';
 
 import AvatarButton from 'components/Navigation/AvatarButton';
+import ViewStatsButton from 'components/Navigation/ViewStatsButton';
+import AddRecordButton from 'components/Navigation/AddRecordButton';
+
+const actions = [AddRecordButton, ViewStatsButton, AvatarButton];
 
 function DesktopNavigation() {
   return (
     <>
-      <IconButton><RiAddCircleLine /></IconButton>
-      <IconButton><RiBarChartLine /></IconButton>
-      <AvatarButton />
+      {map(actions, (Action, i) => <Action key={i} />)}
     </>
   );
 }

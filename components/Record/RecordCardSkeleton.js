@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, Grid, Skeleton } from '@mui/material';
 const RecordCardSkeleton = () => {
   return (
     <Grid item xs={12} sm={6} md={6}>
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           avatar={<Skeleton variant="circular" width={25} height={25} />}
           title={<Skeleton variant="text" width={180} />}
