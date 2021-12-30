@@ -18,7 +18,7 @@ const useRoutes = () => {
   };
 
   const toProfilePage = async(rest) => {
-    await router.push({ pathname: '/', query: { dialog: PROFILE, ...rest } }, '/profile', { shallow: true },
+    await router.push({ pathname: '/', query: { dialog: PROFILE, ...rest } }, '/', { shallow: true },
     );
   };
 
