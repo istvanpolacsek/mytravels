@@ -5,7 +5,7 @@
   "description": "travels distance tracker",
   "start_url": "/",
   "background_color": "#121212",
-  "theme_color": "#00838f",
+  "theme_color": "#121212",
   "dir": "ltr",
   "display": "standalone",
   "orientation": "any",
