@@ -46,7 +46,7 @@ const onUpdateQueryStarted = async(body, { dispatch, queryFulfilled, getState })
     const { _id } = body;
     const { updateQueryData } = util;
 
-    const patch = updateQueryData(
+    const patch = dispatch(updateQueryData(
       RETRIEVE_RECORDS,
       { filter, limit },
       (draft) => {
@@ -54,7 +54,7 @@ const onUpdateQueryStarted = async(body, { dispatch, queryFulfilled, getState })
 
         assign(updated, body);
       },
-    );
+    ));
 
     try {
       await queryFulfilled;
@@ -72,11 +72,17 @@ const onDeleteQueryStarted = async(_id, { dispatch, queryFulfilled, getState }) 
     const { limit } = selectLimit(getState());
     const { updateQueryData } = util;
 
-    const patch = updateQueryData(
+    const patch = dispatch(updateQueryData(
       RETRIEVE_RECORDS,
       { filter, limit },
       (draft) => without(draft, { _id }),
-    );
+    ));
+
+    try {
+      await queryFulfilled;
+    } catch {
+      patch.undo();
+    }
   } catch (e) {
 
   }
