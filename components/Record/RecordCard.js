@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { forwardRef } from 'react';
 import Image from 'next/image';
 import { find, map } from 'lodash';
 import {
@@ -17,7 +17,7 @@ import { RiDeleteBin7Line, RiEdit2Line } from 'react-icons/ri';
 import useRoutes from 'hooks/useRoutes';
 import { TRAVEL_TYPES } from 'lib/constants';
 
-const RecordCard = ({
+const RecordCard = forwardRef(({
   _id: id,
   arrivalgeom,
   arrivalphoto,
@@ -27,7 +27,7 @@ const RecordCard = ({
   getDistance,
   traveldate,
   traveltype = 'Plane',
-}) => {
+}, ref) => {
   const { passiveIcon: Icon } = find(TRAVEL_TYPES, { key: traveltype });
   const src = arrivalphoto
     ? `data:${arrivalphoto.mime};base64,${Buffer.from(arrivalphoto.data.data).toString('base64')}`
@@ -41,7 +41,7 @@ const RecordCard = ({
   const actions = [{ icon: RiEdit2Line, action: toEditRecord }, { icon: RiDeleteBin7Line, action: toDeleteRecord }];
 
   return (
-    <Grid item xs={12} sm={6} md={6}>
+    <Grid item xs={12} sm={6} md={6} ref={ref}>
       <Card variant="outlined">
         <CardHeader
           avatar={<Icon size={20} color={palette.primary.main} />}
@@ -64,6 +64,6 @@ const RecordCard = ({
       </Card>
     </Grid>
   );
-};
+});
 
-export default memo(RecordCard);
+export default RecordCard;

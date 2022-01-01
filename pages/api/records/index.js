@@ -62,7 +62,7 @@ async function handler(req, res) {
             const { limit, filter } = query;
 
             const filters = assign({}, { userid }, filter === 'All' ? {} : { traveltype: filter });
-            const records = await TravelRecord.find(filters, null, { limit, sort: { traveldate: -1 } });
+            const records = await TravelRecord.find(filters, null, { limit: +limit, sort: { traveldate: -1 } });
 
             return res.status(200).json(records);
           } catch (e) {
