@@ -6,41 +6,23 @@ import { Box, Container, Grid } from '@mui/material';
 
 import RecordCardSkeleton from 'components/Record/RecordCardSkeleton';
 import RecordCard from 'components/Record/RecordCard';
-import { increaseLimit, selectFilter, selectLimit } from 'redux/slices/records';
+import { selectFilter, selectLimit } from 'redux/slices/records';
 import { recordsApi } from 'redux/services/recordsService';
 import { toggleLoadingState } from 'redux/slices/settings';
 import { HAVERSINE_OPTIONS } from 'lib/constants';
 
-const { endpoints } = recordsApi;
+const { useRetrieveRecordsQuery } = recordsApi;
 
 function RecordsContainer() {
   const dispatch = useDispatch();
   const filter = useSelector(selectFilter);
   const limit = useSelector(selectLimit);
-  const { data, isLoading, isFetching: loading } = endpoints.retrieveRecords.useQuery({ filter, limit });
+  const { data, isLoading, isFetching: loading } = useRetrieveRecordsQuery({ filter, limit });
 
   const observer = useRef();
 
   const lastRecordRef = useCallback((record) => {
     console.log('---> RecordsContainer.js, line:25', record);
-
-    const currentObserver = observer.current;
-
-    if (currentObserver) {
-      currentObserver.unobserve();
-    }
-
-    currentObserver = new IntersectionObserver((entries) => {
-      const { isIntersecting } = entries[0];
-
-      if (isIntersecting) {
-        dispatch(increaseLimit());
-      }
-    }, { threshold: 0.5 });
-
-    if (record) {
-      currentObserver.observe(record);
-    }
   }, [data?.length]);
 
   const getDistance = useCallback((departure, arrival) => {
