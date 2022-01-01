@@ -17,7 +17,7 @@ import RecordEditSchema from 'lib/yup/models/RecordEdit';
 import { ARRIVAL_ID, CREATE_DEFAULTS, DEPARTURE_ID, TRAVEL_DATE, TRAVEL_TYPE, TRAVEL_TYPES } from 'lib/constants';
 import PlacesAutocomplete from 'components/Pickers/PlacesAutocomplete';
 
-const { endpoints } = recordsApi;
+const { useCreateRecordMutation, useUpdateRecordMutation, useRetrieveRecordsQuery } = recordsApi;
 
 function RecordForm() {
   const { query } = useRouter();
@@ -25,8 +25,8 @@ function RecordForm() {
   const filter = useSelector(selectFilter);
   const id = query?.id;
 
-  const [createRecord] = endpoints.createRecord.useMutation();
-  const [updateRecord] = endpoints.updateRecord.useMutation();
+  const [createRecord] = useCreateRecordMutation();
+  const [updateRecord] = useUpdateRecordMutation();
 
   const selectRecord = useMemo(() => createSelector(
     (res) => res.data,
@@ -34,7 +34,7 @@ function RecordForm() {
     (data, recordId) => find(data, { _id: recordId }),
   ), []);
 
-  const { selectedRecord } = endpoints.retrieveRecords.useQuery({ filter }, {
+  const { selectedRecord } = useRetrieveRecordsQuery({ filter }, {
     selectFromResult: (res) => ({ selectedRecord: selectRecord(res, id) }),
   });
 
@@ -90,7 +90,7 @@ function RecordForm() {
     <DialogContent>
       <DialogTitle>{`${id ? 'Edit' : 'New'} Travel`}</DialogTitle>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <Grid container spacing={2} my={1} >
+        <Grid container spacing={2} my={1}>
           {map(fields, (props, i) => (
             <Grid key={i} item xs={12} sm={6}>
               <Controller control={control} {...props} />

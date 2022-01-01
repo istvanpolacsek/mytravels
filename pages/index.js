@@ -9,7 +9,6 @@ import withAuth from 'components/hocs/withAuth';
 
 const HomeStyled = styled.div`
   margin-top: ${({ theme }) => (10 + 2 * theme.mixins.toolbar.minHeight)}px;
-  margin-bottom: ${({ theme }) => (20 + theme.mixins.toolbar.minHeight)}px
 `;
 
 function Home({ isMobile }) {
