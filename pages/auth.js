@@ -3,8 +3,12 @@ import { useTheme } from '@mui/material';
 import styled from '@emotion/styled';
 
 import ActiveDialog from 'components/ActiveDialog/ActiveDialog';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { setIsMobile } from 'redux/slices/settings';
 
 function Auth({ isMobile }) {
+  const dispatch = useDispatch();
   const { palette: { primary, secondary } } = useTheme();
 
   const AuthStyled = styled.div`
@@ -13,9 +17,13 @@ function Auth({ isMobile }) {
     background: linear-gradient(to right bottom, ${primary.main}, ${secondary.main});
   `;
 
+  useEffect(() => {
+    dispatch(setIsMobile({ isMobile }));
+  }, []);
+
   return (
     <AuthStyled>
-      <ActiveDialog isMobile={isMobile} />
+      <ActiveDialog/>
     </AuthStyled>
   );
 }
