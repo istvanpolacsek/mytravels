@@ -11,6 +11,7 @@ import { increaseLimit, selectQuerySettings } from 'redux/slices/records';
 import { toggleLoadingState } from 'redux/slices/settings';
 import useRoutes from 'hooks/useRoutes';
 import { HAVERSINE_OPTIONS } from 'lib/constants';
+import { LoaderItemStyled } from 'components/RecordsContainer/styled';
 
 const { useRetrieveRecordsQuery } = recordsApi;
 
@@ -65,9 +66,9 @@ function RecordsContainer() {
             : map(records, (record, i) => <RecordCard key={i} {...actions} {...record} />)}
         </Grid>
         {data?.length && <Grid container justifyContent="center" alignItems="flex-start">
-          <Grid item mb={4} mt={1} ref={lastRecordRef} height={60}>
+          <LoaderItemStyled item ref={lastRecordRef}>
             {loading && <CircularProgress size={25} color="inherit" />}
-          </Grid>
+          </LoaderItemStyled>
         </Grid>}
       </Box>
     </Container>
