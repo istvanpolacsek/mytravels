@@ -7,5 +7,5 @@ export const CenteredToolbarStyled = styled(Toolbar)`
 
 export const TravelTypeFilterStyled = styled(AppBar)`
   margin-top: calc(${({ theme }) => theme.mixins.toolbar.minHeight}px + env(safe-area-inset-top, 0));
-  z-index: ${({ theme }) => theme.zIndex.speedDial};
+  z-index: ${({ theme }) => theme.zIndex.speedDial}px;
 `;
