@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { memo } from 'react';
 import Image from 'next/image';
 import { find, map } from 'lodash';
 import {
@@ -9,50 +9,49 @@ import {
   Grid,
   IconButton,
   Skeleton,
+  SvgIcon,
   Typography,
-  useTheme,
 } from '@mui/material';
 import { RiDeleteBin7Line, RiEdit2Line } from 'react-icons/ri';
-
-import useRoutes from 'hooks/useRoutes';
 import { TRAVEL_TYPES } from 'lib/constants';
 
-const RecordCard = forwardRef(({
+function RecordCard({
   _id: id,
-  arrivalgeom,
-  arrivalphoto,
-  arrivalvicinity,
-  departuregeom,
-  departurevicinity,
-  getDistance,
-  traveldate,
-  traveltype = 'Plane',
-}, ref) => {
-  const { passiveIcon: Icon } = find(TRAVEL_TYPES, { key: traveltype });
-  const src = arrivalphoto
-    ? `data:${arrivalphoto.mime};base64,${Buffer.from(arrivalphoto.data.data).toString('base64')}`
-    : undefined;
-  const distance = departuregeom && arrivalgeom
-    ? getDistance(departuregeom.coordinates, arrivalgeom.coordinates)
-    : undefined;
-  const { palette } = useTheme();
-  const { toEditRecord, toDeleteRecord } = useRoutes();
+  arrivalgeom: arrivalPoint,
+  arrivalphoto: arrivalPhoto,
+  arrivalvicinity: arrivalCity,
+  departuregeom: departurePoint,
+  departurevicinity: departureCity,
+  traveldate: travelDate,
+  traveltype: travelType = 'Plane',
+  onDeleteRecord,
+  onEditRecord,
+  onGetDistance,
 
-  const actions = [{ icon: RiEdit2Line, action: toEditRecord }, { icon: RiDeleteBin7Line, action: toDeleteRecord }];
+}) {
+  const { passiveIcon: Icon } = find(TRAVEL_TYPES, { key: travelType });
+  const src = arrivalPhoto
+    ? `data:${arrivalPhoto.mime};base64,${Buffer.from(arrivalPhoto.data.data).toString('base64')}`
+    : undefined;
+  const distance = departurePoint && arrivalPoint
+    ? onGetDistance(departurePoint.coordinates, arrivalPoint.coordinates)
+    : undefined;
+
+  const actions = [{ icon: RiEdit2Line, action: onEditRecord }, { icon: RiDeleteBin7Line, action: onDeleteRecord }];
 
   return (
-    <Grid item xs={12} sm={6} md={6} ref={ref}>
+    <Grid item xs={12} sm={6} md={6}>
       <Card variant="outlined">
         <CardHeader
-          avatar={<Icon size={20} color={palette.primary.main} />}
-          title={departurevicinity && arrivalvicinity ? `${departurevicinity} - ${arrivalvicinity}` : <Skeleton />}
-          subheader={new Intl.DateTimeFormat('en-GB').format(new Date(traveldate))}
+          avatar={<SvgIcon color="primary"><Icon size={20} /></SvgIcon>}
+          title={departureCity && arrivalCity ? `${departureCity} - ${arrivalCity}` : <Skeleton />}
+          subheader={new Intl.DateTimeFormat('en-GB').format(new Date(travelDate))}
           action={map(actions, ({ icon: Icon, action }, i) =>
-            (<IconButton key={i} size="large" onClick={() => action({ id })}><Icon size={20} /></IconButton>))}
+            (<IconButton key={i} size="large" onClick={() => action(id)}><Icon size={20} /></IconButton>))}
         />
         <CardMedia sx={{ position: 'relative', height: 150 }}>
           {src
-            ? <Image layout="fill" objectFit="cover" alt={traveldate} src={src} />
+            ? <Image layout="fill" objectFit="cover" alt={travelDate} src={src} />
             : <Skeleton variant="rectangular" height={150} />}
         </CardMedia>
         <CardContent>
@@ -64,6 +63,6 @@ const RecordCard = forwardRef(({
       </Card>
     </Grid>
   );
-});
+}
 
-export default RecordCard;
+export default memo(RecordCard);

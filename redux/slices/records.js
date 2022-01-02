@@ -1,10 +1,5 @@
-import { createDraftSafeSelector, createSelector, createSlice } from '@reduxjs/toolkit';
+import { createDraftSafeSelector, createSlice } from '@reduxjs/toolkit';
 import { assign } from 'lodash';
-
-import { recordsApi, RETRIEVE_RECORDS } from 'redux/services/recordsService';
-
-const { endpoints } = recordsApi;
-const retrieve = endpoints[RETRIEVE_RECORDS].select();
 
 const initialLimit = 10;
 const increment = 10;
@@ -34,12 +29,9 @@ export const selectLimit = createDraftSafeSelector(
   ({ records }) => records.limit,
 );
 
-export const selectQuerySettings = createSelector(
-  selectFilter,
-  selectLimit,
-  (filter, limit) => retrieve({ filter, limit }),
-  (filter, limit, res) => res,
+export const selectQuerySettings = createDraftSafeSelector(
+  (state) => state,
+  ({ records: { filter, limit } }) => ({ filter, limit }),
 );
-
 
 export default recordsSlice.reducer;

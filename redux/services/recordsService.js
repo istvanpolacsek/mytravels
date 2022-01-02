@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { assign, find, map, without } from 'lodash';
+import { assign, find, map, nth, pullAllBy, tail } from 'lodash';
 
 import { selectFilter, selectLimit } from 'redux/slices/records';
 import { DELETE, POST, PUT } from 'lib/constants';
@@ -38,7 +38,13 @@ const onCreateQueryStarted = async(body, { dispatch, queryFulfilled, getState })
     const patch = dispatch(updateQueryData(
       RETRIEVE_RECORDS,
       { filter, limit },
-      (draft) => ([body, ...draft]).sort((a, b) => new Date(b.traveldate) - new Date(a.traveldate)),
+      (draft) => {
+        const records = tail(draft);
+        const settings = nth(draft, 0);
+        const newRecords = ([body, ...records]).sort((a, b) => new Date(b.traveldate) - new Date(a.traveldate));
+
+        return [settings, ...newRecords];
+      },
     ));
 
     try {
@@ -87,7 +93,7 @@ const onDeleteQueryStarted = async(_id, { dispatch, queryFulfilled, getState }) 
     const patch = dispatch(updateQueryData(
       RETRIEVE_RECORDS,
       { filter, limit },
-      (draft) => without(draft, { _id }),
+      (draft) => pullAllBy(draft, [{ _id }], '_id'),
     ));
 
     try {

@@ -1,6 +1,5 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { useSelector } from 'react-redux';
-import { createSelector } from '@reduxjs/toolkit';
 import { useRouter } from 'next/router';
 import { find, map } from 'lodash';
 import { Controller, useForm } from 'react-hook-form';
@@ -9,36 +8,29 @@ import { ButtonGroup, DialogActions, DialogContent, DialogTitle, Grid, MenuItem,
 import { DatePicker, LoadingButton } from '@mui/lab';
 import { RiCloseLine, RiSaveLine } from 'react-icons/ri';
 
-import useRoutes from 'hooks/useRoutes';
+import PlacesAutocomplete from 'components/Pickers/PlacesAutocomplete';
 import { recordsApi } from 'redux/services/recordsService';
-import { selectFilter } from 'redux/slices/records';
+import { selectQuerySettings } from 'redux/slices/records';
+import useRoutes from 'hooks/useRoutes';
 import RecordNewSchema from 'lib/yup/models/RecordNew';
 import RecordEditSchema from 'lib/yup/models/RecordEdit';
 import { ARRIVAL_ID, CREATE_DEFAULTS, DEPARTURE_ID, TRAVEL_DATE, TRAVEL_TYPE, TRAVEL_TYPES } from 'lib/constants';
-import PlacesAutocomplete from 'components/Pickers/PlacesAutocomplete';
 
 const { useCreateRecordMutation, useUpdateRecordMutation, useRetrieveRecordsQuery } = recordsApi;
 
 function RecordForm() {
   const { query } = useRouter();
   const { toHomePage } = useRoutes();
-  const filter = useSelector(selectFilter);
+  const querySettings = useSelector(selectQuerySettings);
   const id = query?.id;
 
+  const { data } = useRetrieveRecordsQuery(querySettings);
   const [createRecord] = useCreateRecordMutation();
   const [updateRecord] = useUpdateRecordMutation();
 
-  const selectRecord = useMemo(() => createSelector(
-    (res) => res.data,
-    (res, recordId) => recordId,
-    (data, recordId) => find(data, { _id: recordId }),
-  ), []);
+  const selectedRecord = find(data, { _id: id });
 
-  const { selectedRecord } = useRetrieveRecordsQuery({ filter }, {
-    selectFromResult: (res) => ({ selectedRecord: selectRecord(res, id) }),
-  });
-
-  const { control, formState: { isSubmitting, isValid }, getValues, handleSubmit, watch } = useForm({
+  const { control, formState: { isSubmitting, isValid }, getValues, handleSubmit } = useForm({
     mode: 'onChange',
     resolver: yupResolver(id ? RecordEditSchema : RecordNewSchema),
     defaultValues: id ? selectedRecord : CREATE_DEFAULTS,
@@ -55,11 +47,11 @@ function RecordForm() {
     },
   ];
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async() => {
     const submitAction = [createRecord, updateRecord][+!!id];
 
     submitAction(getValues());
-    toHomePage();
+    await toHomePage();
   };
 
   const fields = [

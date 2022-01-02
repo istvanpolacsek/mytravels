@@ -9,12 +9,12 @@ import { RiCloseLine, RiDeleteBin7Line } from 'react-icons/ri';
 import useRoutes from 'hooks/useRoutes';
 import { recordsApi } from 'redux/services/recordsService';
 
-const { endpoints } = recordsApi;
+const { useDeleteRecordMutation } = recordsApi;
 
 function RecordDelete() {
   const { toHomePage } = useRoutes();
   const { query: { id } } = useRouter();
-  const [deleteRecord] = endpoints.deleteRecord.useMutation();
+  const [deleteRecord] = useDeleteRecordMutation();
   const { formState: { isSubmitting }, handleSubmit } = useForm({ mode: 'onChange' });
 
   const handleFormSubmit = () => {

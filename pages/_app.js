@@ -5,10 +5,11 @@ import { CssBaseline } from '@mui/material';
 
 import ContextWrapper from 'components/ContextWrapper/ContextWrapper';
 import GlobalLoader from 'components/GlobalLoader/GlobalLoader';
+import ActiveDialog from 'components/ActiveDialog/ActiveDialog';
 
 const clientSideEmotionCache = createCache({ key: 'css' });
 
-function App({ Component, emotionCache = clientSideEmotionCache, pageProps, session, isMobile = true, ...rest }) {
+function App({ Component, emotionCache = clientSideEmotionCache, pageProps, session }) {
   return (
     <>
       <Head><title>My Travels</title></Head>
@@ -16,6 +17,7 @@ function App({ Component, emotionCache = clientSideEmotionCache, pageProps, sess
       <ContextWrapper emotionCache={emotionCache} session={session}>
         <CssBaseline />
         <GlobalLoader />
+        <ActiveDialog />
         <Component {...pageProps} />
       </ContextWrapper>
     </>

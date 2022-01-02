@@ -4,23 +4,25 @@ import { map, nth, tail } from 'lodash';
 import haversine from 'haversine';
 import { Box, CircularProgress, Container, Grid } from '@mui/material';
 
-import RecordCardSkeleton from 'components/Record/RecordCardSkeleton';
 import RecordCard from 'components/Record/RecordCard';
-import { increaseLimit, selectFilter, selectLimit, selectQuerySettings } from 'redux/slices/records';
+import RecordCardSkeleton from 'components/Record/RecordCardSkeleton';
 import { recordsApi } from 'redux/services/recordsService';
+import { increaseLimit, selectQuerySettings } from 'redux/slices/records';
 import { toggleLoadingState } from 'redux/slices/settings';
+import useRoutes from 'hooks/useRoutes';
 import { HAVERSINE_OPTIONS } from 'lib/constants';
 
 const { useRetrieveRecordsQuery } = recordsApi;
 
 function RecordsContainer() {
   const dispatch = useDispatch();
-  const filter = useSelector(selectFilter);
-  const limit = useSelector(selectLimit);
-  const { data, isLoading, isFetching: loading } = useRetrieveRecordsQuery({ filter, limit });
-  const hasMore = data && data[0]?.count > limit;
-  const records = tail(data);
   const observer = useRef(null);
+  const { toDeleteRecord, toEditRecord } = useRoutes();
+
+  const querySettings = useSelector(selectQuerySettings);
+  const { data, isLoading, isFetching: loading } = useRetrieveRecordsQuery(querySettings);
+  const hasMore = data && data[0]?.count > querySettings.limit;
+  const records = tail(data);
 
   const lastRecordRef = useCallback((record) => {
     if (observer.current) {
@@ -33,38 +35,37 @@ function RecordsContainer() {
       if (isIntersecting && hasMore && !loading) {
         dispatch(increaseLimit());
       }
-    }, { threshold: 0 });
+    }, { threshold: 0, rootMargin: '100px 0px 0px 0px' });
 
     if (record) {
       observer.current.observe(record);
     }
   }, [hasMore, loading]);
 
-  const getDistance = useCallback((departure, arrival) => haversine(departure, arrival, HAVERSINE_OPTIONS), []);
+  const handleDeleteRecord = useCallback((id) => toDeleteRecord({ id }), []);
+  const handleEditRecord = useCallback((id) => toEditRecord({ id }), []);
+  const handleGetDistance = useCallback((departure, arrival) => haversine(departure, arrival, HAVERSINE_OPTIONS), []);
+
+  const actions = ({
+    onDeleteRecord: handleDeleteRecord,
+    onEditRecord: handleEditRecord,
+    onGetDistance: handleGetDistance,
+  });
 
   useEffect(() => {
     dispatch(toggleLoadingState({ loading }));
   }, [loading]);
-
-  const a = useSelector(selectQuerySettings);
-  console.log('---> RecordsContainer.js, line:50', a);
 
   return (
     <Container disableGutters maxWidth="md">
       <Box m={{ xs: 0, sm: 1 }}>
         <Grid container spacing={1}>
           {isLoading
-            ? map(new Array(4), (el, i) => (<RecordCardSkeleton key={i} />))
-            : map(records, (record, i) => (
-              <RecordCard
-                key={i}
-                ref={i === records.length - 1 ? lastRecordRef : null}
-                getDistance={getDistance}
-                {...record}
-              />))}
+            ? map(new Array(4), (el, i) => <RecordCardSkeleton key={i} />)
+            : map(records, (record, i) => <RecordCard key={i} {...actions} {...record} />)}
         </Grid>
         {data?.length && <Grid container justifyContent="center" alignItems="flex-start">
-          <Grid item mb={6} mt={1}>
+          <Grid item mb={4} mt={1} ref={lastRecordRef} height={60}>
             {loading && <CircularProgress size={25} color="inherit" />}
           </Grid>
         </Grid>}

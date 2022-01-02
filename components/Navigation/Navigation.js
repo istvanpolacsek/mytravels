@@ -1,13 +1,17 @@
 import { memo } from 'react';
+import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import { AppBar, Container, Typography } from '@mui/material';
 
 import DarkModeSwitch from 'components/Navigation/DarkModeSwitch';
 import DesktopNavigation from 'components/Navigation/DesktopNavigation';
 import MobileNavigation from 'components/Navigation/MobileNavigation';
+import { selectIsMobile } from 'redux/slices/settings';
 import { ToolbarStyled } from 'components/Navigation/styled';
 
-function Navigation({ isMobile }) {
+function Navigation() {
+  const isMobile = useSelector(selectIsMobile);
+
   return (
     <>
       <AppBar position="fixed" color="transparent">
