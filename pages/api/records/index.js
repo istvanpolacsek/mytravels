@@ -62,9 +62,10 @@ async function handler(req, res) {
             const { limit, filter } = query;
 
             const filters = assign({}, { userid }, filter === 'All' ? {} : { traveltype: filter });
-            const records = await TravelRecord.find(filters, null, { limit, sort: { traveldate: -1 } });
+            const records = await TravelRecord.find(filters, null, { limit: +limit, sort: { traveldate: -1 } });
+            const count = await TravelRecord.count(filters);
 
-            return res.status(200).json(records);
+            return res.status(200).json([{ count }, ...records]);
           } catch (e) {
             return res.status(500).json(e);
           }
