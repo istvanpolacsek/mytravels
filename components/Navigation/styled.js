@@ -9,8 +9,8 @@ export const ToolbarStyled = styled(Toolbar)`
 `;
 
 export const MobileToolbar = styled(Toolbar)`
-  margin-bottom: 15px;
   justify-content: space-between;
+  padding-bottom: env(safe-area-inset-bottom, 10px);
 `;
 
 export const DarkModeSwitchStyled = styled(Stack)`
