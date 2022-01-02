@@ -6,7 +6,7 @@ import { CgInfinity } from 'react-icons/cg';
 
 import { selectFilter, setFilter } from 'redux/slices/records';
 import { TRAVEL_TYPES } from 'lib/constants';
-import { CenteredToolbarStyled, TravelTypeFilterStyled } from 'components/TravelTypeFilter/styled';
+import { TravelTypeAppbarStyled, TravelTypeToolbarStyled } from 'components/TravelTypeFilter/styled';
 
 function TravelTypeFilter() {
   const dispatch = useDispatch();
@@ -19,9 +19,9 @@ function TravelTypeFilter() {
 
   return (
     <Slide appear={false} direction="down" in={!trigger}>
-      <TravelTypeFilterStyled component="div" color="transparent">
+      <TravelTypeAppbarStyled component="div" color="transparent">
         <Container>
-          <CenteredToolbarStyled>
+          <TravelTypeToolbarStyled>
             <ToggleButtonGroup exclusive value={filter} onChange={handleFilterChange}>
               <ToggleButton value="All">
                 <CgInfinity />
@@ -32,9 +32,9 @@ function TravelTypeFilter() {
                 </ToggleButton>
               ))}
             </ToggleButtonGroup>
-          </CenteredToolbarStyled>
+          </TravelTypeToolbarStyled>
         </Container>
-      </TravelTypeFilterStyled>
+      </TravelTypeAppbarStyled>
     </Slide>
   );
 }
