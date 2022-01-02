@@ -12,7 +12,10 @@ const clientSideEmotionCache = createCache({ key: 'css' });
 function App({ Component, emotionCache = clientSideEmotionCache, pageProps, session }) {
   return (
     <>
-      <Head><title>My Travels</title></Head>
+      <Head>
+        <title>My Travels</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width, user-scalable=no" />
+      </Head>
       <Script async id="google-maps" strategy="afterInteractive" src={process.env.NEXT_PUBLIC_MAPS_SRC} />
       <ContextWrapper emotionCache={emotionCache} session={session}>
         <CssBaseline />
