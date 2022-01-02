@@ -46,8 +46,6 @@ function RecordsContainer() {
   const handleEditRecord = useCallback((id) => toEditRecord({ id }), []);
   const handleGetDistance = useCallback((departure, arrival) => haversine(departure, arrival, HAVERSINE_OPTIONS), []);
 
-  console.log('hi');
-
   const actions = ({
     onDeleteRecord: handleDeleteRecord,
     onEditRecord: handleEditRecord,
