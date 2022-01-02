@@ -36,9 +36,12 @@ class CustomDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <meta name="theme-color" content={backgroundDark} />
-          <meta name="mobile-web-app-capable" content="yes" />
           <meta name="application-name" content="My Travels" />
+          <meta name="viewport" content="initial-scale=1, viewport-fit=cover, width=device-width"/>
+          <meta name="theme-color" content={backgroundDark} />
+          <meta name="apple-mobile-web-app-capable" content="yes"/>
+          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+          <meta name="mobile-web-app-capable" content="yes" />
           <meta name="msapplication-starturl" content="/" />
           <meta name="msapplication-navbutton-color" content={backgroundDark} />
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
