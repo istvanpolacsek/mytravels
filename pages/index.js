@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import RecordsContainer from 'components/RecordsContainer/RecordsContainer';
 
 const HomeStyled = styled.div`
-  margin-top: ${({ theme }) => (10 + 2 * theme.mixins.toolbar.minHeight)}px;
+  margin-top: calc(${({ theme }) => (10 + 2 * theme.mixins.toolbar.minHeight)}px + env(safe-area-inset-top, 0));
 `;
 
 function Home({ isMobile }) {

@@ -36,6 +36,7 @@ class CustomDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <meta name="orientation" content="portrait" />
           <meta name="application-name" content="My Travels" />
           <meta name="theme-color" content={backgroundDark} />
           <meta name="apple-mobile-web-app-capable" content="yes" />
