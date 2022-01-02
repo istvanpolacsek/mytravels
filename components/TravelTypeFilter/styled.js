@@ -6,5 +6,5 @@ export const CenteredToolbarStyled = styled(Toolbar)`
 `;
 
 export const TravelTypeFilterStyled = styled(AppBar)`
-  top: ${({ theme }) => theme.mixins.toolbar.minHeight}px;
+  top: calc(${({ theme }) => theme.mixins.toolbar.minHeight}px + env(safe-area-inset-top, 0));
 `;
