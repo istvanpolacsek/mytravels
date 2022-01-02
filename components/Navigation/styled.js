@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 import { Stack, Toolbar } from '@mui/material';
 
 export const ToolbarStyled = styled(Toolbar)`
+  paddingTop: env(safe-area-inset-top, 0);
+
   a {
     color: inherit;
     text-decoration: inherit;
