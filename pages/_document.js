@@ -37,7 +37,7 @@ class CustomDocument extends Document {
       <Html lang="en">
         <Head>
           <meta name="application-name" content="My Travels" />
-          <meta name="viewport" content="initial-scale=1, viewport-fit=cover, width=device-width"/>
+          <meta name="viewport" content="initial-scale=1, width=device-width, user-scalable=no"/>
           <meta name="theme-color" content={backgroundDark} />
           <meta name="apple-mobile-web-app-capable" content="yes"/>
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
