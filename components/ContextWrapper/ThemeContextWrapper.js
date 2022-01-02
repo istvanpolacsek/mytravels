@@ -32,7 +32,6 @@ function ThemeContextWrapper({ children, emotionCache }) {
           colorTransparent: {
             backdropFilter: 'blur(10px)',
             boxShadow: `${[dividerLight, dividerDark][i]} 0px -1px 1px inset`,
-            paddingTop: 'env(safe-area-inset-top)',
           },
         },
       },
