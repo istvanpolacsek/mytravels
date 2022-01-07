@@ -49,7 +49,7 @@ function RecordCard({
           action={map(actions, ({ icon: Icon, action }, i) =>
             (<IconButton key={i} size="large" onClick={() => action(id)}><Icon size={20} /></IconButton>))}
         />
-        <CardMedia sx={{ position: 'relative', height: 150 }}>
+        <CardMedia sx={{ position: 'relative', height: 150, pointerEvents: 'none', touchAction: 'none' }}>
           {src
             ? <Image layout="fill" objectFit="cover" alt={travelDate} src={src} />
             : <Skeleton variant="rectangular" height={150} />}
