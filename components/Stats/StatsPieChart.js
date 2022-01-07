@@ -14,10 +14,10 @@ function StatsPieChart({ data }) {
   return (
     <StatsPieChartStyled width="100%" height={300}>
       <PieChart>
-        <Legend content={<StatsPieChartLegend cities={cities} kilometers={kilometers} />} />
         <Pie outerRadius={60} data={pieStats} dataKey="value" nameKey="name">
           {map(pieStats, (el, i) => <Cell key={`cell-${i}`} fill={getFillColor(i)} />)}
         </Pie>
+        <Legend content={<StatsPieChartLegend cities={cities} kilometers={kilometers} />} />
       </PieChart>
     </StatsPieChartStyled>
   );
