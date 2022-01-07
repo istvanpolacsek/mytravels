@@ -11,6 +11,7 @@ import { RiCloseLine, RiSaveLine } from 'react-icons/ri';
 import PlacesAutocomplete from 'components/Pickers/PlacesAutocomplete';
 import { recordsApi } from 'redux/services/recordsService';
 import { selectQuerySettings } from 'redux/slices/records';
+import { selectIsMobile } from 'redux/slices/settings';
 import useRoutes from 'hooks/useRoutes';
 import RecordNewSchema from 'lib/yup/models/RecordNew';
 import RecordEditSchema from 'lib/yup/models/RecordEdit';
@@ -22,6 +23,7 @@ function RecordForm() {
   const { query } = useRouter();
   const { toHomePage } = useRoutes();
   const querySettings = useSelector(selectQuerySettings);
+  const isMobile = useSelector(selectIsMobile);
   const id = query?.id;
 
   const { data } = useRetrieveRecordsQuery(querySettings);
@@ -30,7 +32,7 @@ function RecordForm() {
 
   const selectedRecord = find(data, { _id: id });
 
-  const { control, formState: { isSubmitting, isValid }, getValues, handleSubmit } = useForm({
+  const { control, formState: { isSubmitting, isValid }, handleSubmit } = useForm({
     mode: 'onChange',
     resolver: yupResolver(id ? RecordEditSchema : RecordNewSchema),
     defaultValues: id ? selectedRecord : CREATE_DEFAULTS,
@@ -47,10 +49,10 @@ function RecordForm() {
     },
   ];
 
-  const handleFormSubmit = async() => {
+  const handleFormSubmit = async(form) => {
     const submitAction = [createRecord, updateRecord][+!!id];
 
-    submitAction(getValues());
+    submitAction(form);
     await toHomePage();
   };
 
@@ -89,7 +91,7 @@ function RecordForm() {
             </Grid>))}
         </Grid>
         <DialogActions>
-          <ButtonGroup fullWidth>
+          <ButtonGroup fullWidth={isMobile}>
             {map(actions, ({ title, ...rest }, i) => (
               <LoadingButton key={i} {...rest}>{title}</LoadingButton>))}
           </ButtonGroup>

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { DELETE_RECORD, EDIT_RECORD, PROFILE, SIGN_IN } from 'components/ActiveDialog/constants';
+import { DELETE_RECORD, EDIT_RECORD, PROFILE, SIGN_IN, STATS } from 'components/ActiveDialog/constants';
 
 const useRoutes = () => {
   const router = useRouter();
@@ -30,7 +30,11 @@ const useRoutes = () => {
     await router.push({ pathname: '/', query: { dialog: DELETE_RECORD, ...rest } }, '/', { shallow: true });
   };
 
-  return { toHomePage, toLoginPage, toProfilePage, toEditRecord, toDeleteRecord };
+  const toStatsPage = async() => {
+    await router.push({ pathname: '/', query: { dialog: STATS } }, '/', { shallow: true });
+  };
+
+  return { toHomePage, toLoginPage, toProfilePage, toEditRecord, toDeleteRecord, toStatsPage };
 };
 
 export default useRoutes;

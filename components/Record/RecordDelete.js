@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { map } from 'lodash';
@@ -6,14 +7,16 @@ import { ButtonGroup, DialogActions, DialogContent, DialogTitle } from '@mui/mat
 import { LoadingButton } from '@mui/lab';
 import { RiCloseLine, RiDeleteBin7Line } from 'react-icons/ri';
 
-import useRoutes from 'hooks/useRoutes';
 import { recordsApi } from 'redux/services/recordsService';
+import { selectIsMobile } from 'redux/slices/settings';
+import useRoutes from 'hooks/useRoutes';
 
 const { useDeleteRecordMutation } = recordsApi;
 
 function RecordDelete() {
   const { toHomePage } = useRoutes();
   const { query: { id } } = useRouter();
+  const isMobile = useSelector(selectIsMobile);
   const [deleteRecord] = useDeleteRecordMutation();
   const { formState: { isSubmitting }, handleSubmit } = useForm({ mode: 'onChange' });
 
@@ -39,7 +42,7 @@ function RecordDelete() {
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogActions disableSpacing>
-          <ButtonGroup fullWidth>
+          <ButtonGroup fullWidth={isMobile}>
             {map(actions, ({ title, ...rest }, i) => (
               <LoadingButton key={i} variant="outlined" {...rest}>{title}</LoadingButton>))}
           </ButtonGroup>
