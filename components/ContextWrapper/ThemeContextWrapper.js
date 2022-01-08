@@ -1,0 +1,79 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { CacheProvider } from '@emotion/react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import { getColorMode, selectIsDarkModeActive } from 'redux/slices/settings';
+
+export const primaryLight = '#00838f';
+export const primaryDark = '#b2ebf2';
+export const secondaryLight = '#ef6c00';
+export const secondaryDark = '#ffcc80';
+export const dividerLight = 'rgba(0,0,0,0.12)';
+export const dividerDark = 'rgba(255,255,255,0.12)';
+export const backgroundLight = '#ffffff';
+export const backgroundDark = '#121212';
+
+function ThemeContextWrapper({ children, emotionCache }) {
+  const dispatch = useDispatch();
+  const i = +useSelector(selectIsDarkModeActive);
+
+  const theme = createTheme({
+    mixins: { toolbar: { minHeight: 44 } },
+    palette: {
+      mode: ['light', 'dark'][i],
+      primary: { main: [primaryLight, primaryDark][i] },
+      secondary: { main: [secondaryLight, secondaryDark][i] },
+      divider: [dividerLight, dividerDark][i],
+    },
+    components: {
+      MuiAppBar: {
+        styleOverrides: {
+          colorTransparent: {
+            backdropFilter: 'blur(10px)',
+            boxShadow: `${[dividerLight, dividerDark][i]} 0px -1px 1px inset`,
+          },
+        },
+      },
+      MuiBackdrop: { styleOverrides: { root: { backdropFilter: 'blur(10px)' } } },
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            '@media(max-width: 600px)': {
+              borderRadius: 0,
+              border: 'unset',
+              borderTop: `1px solid ${[dividerLight, dividerDark][i]}`,
+              borderBottom: `1px solid ${[dividerLight, dividerDark][i]}`,
+            },
+          },
+        },
+      },
+      MuiDialogTitle: { styleOverrides: { root: { padding: '16px 8px' } } },
+      MuiDrawer: {
+        styleOverrides: {
+          paper: {
+            borderRadius: '10px 10px 0 0',
+            paddingBottom: 'env(safe-area-inset-bottom, 0)',
+          },
+        },
+      },
+      MuiTypography: { styleOverrides: { root: { fontWeight: 'lighter' } } },
+      MuiButton: { defaultProps: { variant: 'outlined' } },
+      MuiLoadingButton: { defaultProps: { variant: 'outlined' } },
+    },
+  });
+
+  useEffect(() => {
+    dispatch(getColorMode());
+  }, []);
+
+  return (
+    <CacheProvider value={emotionCache}>
+      <ThemeProvider theme={theme}>
+        {children}
+      </ThemeProvider>
+    </CacheProvider>
+  );
+}
+
+export default ThemeContextWrapper;
