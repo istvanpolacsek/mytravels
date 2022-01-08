@@ -6,23 +6,29 @@ import { DELETE, POST, PUT } from 'lib/constants';
 
 export const CREATE_RECORD = 'createRecord';
 export const RETRIEVE_RECORDS = 'retrieveRecords';
+export const RETRIEVE_STATS = 'retrieveStats';
 export const UPDATE_RECORD = 'updateRecord';
 export const DELETE_RECORD = 'deleteRecord';
 
-const type = 'record';
+const RECORD = 'record';
+const STATS = 'stats';
 const baseQuery = fetchBaseQuery({ baseUrl: 'api/' });
 
 export const recordsApi = createApi({
   reducerPath: 'recordsAPI',
   baseQuery,
-  tagTypes: [type],
+  tagTypes: [RECORD, STATS],
   endpoints: ({ query }) => ({
     [RETRIEVE_RECORDS]: query({
       query: ({ limit = 10, filter }) => ({ url: '/records', params: { limit, filter } }),
       providesTags: (results) => [
-        ...(results ? [...map(results, ({ _id: id }) => ({ type, id }))] : []),
-        { type, id: 'LIST' },
+        ...(results ? [...map(results, ({ _id: id }) => ({ type: RECORD, id }))] : []),
+        { type: RECORD, id: 'LIST' },
       ],
+    }),
+    [RETRIEVE_STATS]: query({
+      query: () => ({ url: '/stats' }),
+      providesTags: [{ type: STATS, id: 'OBJECT' }],
     }),
   }),
 });
@@ -110,17 +116,17 @@ recordsApi.injectEndpoints({
   endpoints: ({ mutation }) => ({
     [CREATE_RECORD]: mutation({
       query: (body) => ({ url: '/records', method: POST, body }),
-      invalidatesTags: [{ type, id: 'LIST' }],
+      invalidatesTags: [{ type: RECORD, id: 'LIST' }, { type: STATS, id: 'OBJECT' }],
       onQueryStarted: onCreateQueryStarted,
     }),
     [UPDATE_RECORD]: mutation({
       query: (body) => ({ url: `/records/${body._id}`, method: PUT, body }),
-      invalidatesTags: (results, error, { _id: id }) => [{ type, id }],
+      invalidatesTags: (results, error, { _id: id }) => [{ type: RECORD, id }, { type: STATS, id: 'OBJECT' }],
       onQueryStarted: onUpdateQueryStarted,
     }),
     [DELETE_RECORD]: mutation({
       query: (id) => ({ url: `/records/${id}`, method: DELETE }),
-      invalidatesTags: (results, error, id) => [{ type, id }],
+      invalidatesTags: (results, error, id) => [{ type: RECORD, id }, { type: STATS, id: 'OBJECT' }],
       onQueryStarted: onDeleteQueryStarted,
     }),
   }),
