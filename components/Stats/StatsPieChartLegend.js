@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { find, map, reduce, round } from 'lodash';
 import { Chip, Grid } from '@mui/material';
 import { RiBuilding2Line, RiRoadMapLine } from 'react-icons/ri';
 import { CgInfinity } from 'react-icons/cg';
 
 import { TRAVEL_TYPES } from 'lib/constants';
+import { StatsPieChartLegendStyled } from 'components/Stats/styled';
 
 function StatsPieChartLegend({ cities, kilometers, payload }) {
   const fields = useMemo(() => [
@@ -20,12 +21,15 @@ function StatsPieChartLegend({ cities, kilometers, payload }) {
     { label: 'Total Traveled:', value: `${round(kilometers, 0)} km`, icon: RiRoadMapLine },
   ], [cities, kilometers, payload]);
 
-  return map(fields, ({ label, value, fill, icon: Icon }, i) => (
-    <Grid container m={0.5} key={i} alignItems="center" justifyContent="space-between">
-      <Grid item>{Icon && <Icon />} {label}</Grid>
-      <Chip variant="outlined" size="small" label={value} style={{ backgroundColor: fill }} />
-    </Grid>
-  ));
+  return (
+    <StatsPieChartLegendStyled>
+      {map(fields, ({ label, value, fill, icon: Icon }, i) => (
+        <Grid container m={0.5} key={i} alignItems="center" justifyContent="space-between">
+          <Grid item>{Icon && <Icon />} {label}</Grid>
+          <Chip variant="outlined" size="small" label={value} style={{ backgroundColor: fill }} />
+        </Grid>))}
+    </StatsPieChartLegendStyled>
+  );
 }
 
-export default StatsPieChartLegend;
+export default memo(StatsPieChartLegend);

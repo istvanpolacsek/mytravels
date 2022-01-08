@@ -1,14 +1,14 @@
 import { memo, useState } from 'react';
-import { Button, DialogActions, DialogContent, DialogTitle, Grid, Skeleton, Tab, Typography } from '@mui/material';
-
-import { recordStatsApi } from 'redux/services/recordStatsService';
-import useRoutes from 'hooks/useRoutes';
 import { get, includes, map, round } from 'lodash';
+import { Button, DialogActions, DialogContent, DialogTitle, Grid, Skeleton, Tab, Typography } from '@mui/material';
 import { TabContext, TabList } from '@mui/lab';
-import StatsPieChart from 'components/Stats/StatsPieChart';
-import StatsPieChartSkeleton from 'components/Stats/StatsPieChartSkeleton';
 
-const { useRetrieveStatsQuery } = recordStatsApi;
+import StatsPieChartSkeleton from 'components/Stats/StatsPieChartSkeleton';
+import StatsPieChart from 'components/Stats/StatsPieChart';
+import { recordsApi } from 'redux/services/recordsService';
+import useRoutes from 'hooks/useRoutes';
+
+const { useRetrieveStatsQuery } = recordsApi;
 
 const TabLabelSkeleton = () => (
   <Grid container direction="column" alignItems="center">

@@ -36,7 +36,7 @@ async function handler(req, res) {
           try {
             const filters = { userid };
 
-            const records = await TravelRecord.find(filters, projection);
+            const records = await TravelRecord.find(filters, projection, { sort: { traveldate: -1 } });
 
             const years = uniq(map(records, ({ traveldate }) => new Date(traveldate).getFullYear()));
             const bars = reduce(years, (acc, year) => {
