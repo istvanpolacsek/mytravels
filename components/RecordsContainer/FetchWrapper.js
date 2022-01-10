@@ -70,7 +70,7 @@ function FetchWrapper({ children }) {
     }
   };
 
-  const onTouchEnd = (e) => {
+  const onTouchEnd = () => {
     const { thresholdReached } = draggingState;
 
     if (thresholdReached) {
