@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { assign, find, map, nth, pullAllBy, tail } from 'lodash';
+import { assign, find, includes, map, nth, pullAllBy, tail, without } from 'lodash';
 
-import { selectFilter, selectLimit } from 'redux/slices/records';
+import { selectQuerySettings } from 'redux/slices/records';
 import { DELETE, POST, PUT } from 'lib/constants';
 
 export const CREATE_RECORD = 'createRecord';
@@ -37,9 +37,9 @@ const { util } = recordsApi;
 
 const onCreateQueryStarted = async(body, { dispatch, queryFulfilled, getState }) => {
   try {
-    const filter = selectFilter(getState());
-    const limit = selectLimit(getState());
+    const { filter, limit } = selectQuerySettings(getState());
     const { updateQueryData } = util;
+    const { traveltype } = body;
 
     const patch = dispatch(updateQueryData(
       RETRIEVE_RECORDS,
@@ -47,7 +47,8 @@ const onCreateQueryStarted = async(body, { dispatch, queryFulfilled, getState })
       (draft) => {
         const records = tail(draft);
         const settings = nth(draft, 0);
-        const newRecords = ([body, ...records]).sort((a, b) => new Date(b.traveldate) - new Date(a.traveldate));
+        const newRecords = ([...(includes(['All', traveltype], filter) ? [body] : []), ...records])
+          .sort((a, b) => new Date(b.traveldate) - new Date(a.traveldate));
 
         return [settings, ...newRecords];
       },
@@ -65,18 +66,22 @@ const onCreateQueryStarted = async(body, { dispatch, queryFulfilled, getState })
 
 const onUpdateQueryStarted = async(body, { dispatch, queryFulfilled, getState }) => {
   try {
-    const filter = selectFilter(getState());
-    const limit = selectLimit(getState());
-    const { _id } = body;
+    const { filter, limit } = selectQuerySettings(getState());
+    const { _id, traveltype } = body;
     const { updateQueryData } = util;
 
     const patch = dispatch(updateQueryData(
       RETRIEVE_RECORDS,
       { filter, limit },
       (draft) => {
-        const updated = find(draft, { _id });
+        const settings = nth(draft, 0);
+        const touched = find(draft, { _id });
+        const records = without(draft, settings, touched);
+        const updated = assign({}, touched, body);
+        const newRecords = ([...(includes(['All', traveltype], filter) ? [updated] : []), ...records])
+          .sort((a, b) => new Date(b.traveldate) - new Date(a.traveldate));
 
-        assign(updated, body);
+        return [settings, ...newRecords];
       },
     ));
 
@@ -92,8 +97,7 @@ const onUpdateQueryStarted = async(body, { dispatch, queryFulfilled, getState })
 
 const onDeleteQueryStarted = async(_id, { dispatch, queryFulfilled, getState }) => {
   try {
-    const filter = selectFilter(getState());
-    const limit = selectLimit(getState());
+    const { filter, limit } = selectQuerySettings(getState());
     const { updateQueryData } = util;
 
     const patch = dispatch(updateQueryData(

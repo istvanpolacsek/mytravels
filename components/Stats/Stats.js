@@ -39,7 +39,7 @@ function Stats() {
       <DialogTitle>Stats</DialogTitle>
       <DialogContent>
         <TabContext value={tab}>
-          <TabList centered onChange={handleTabChange}>
+          <TabList variant="scrollable" onChange={handleTabChange}>
             {includes([isLoading, isFetching], true)
               ? map(new Array(2), (el, i) => <Tab disabled key={i} value={`${i}`} label={<TabLabelSkeleton />} />)
               : map(data, ({ year, kilometers }, i) => (
