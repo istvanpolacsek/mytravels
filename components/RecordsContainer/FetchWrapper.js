@@ -11,7 +11,7 @@ const { useRetrieveRecordsQuery } = recordsApi;
 
 const pullDownThreshold = 35;
 const pullDownMaximumValue = 55;
-const resistance = 2;
+const resistance = 3;
 
 function FetchWrapper({ children }) {
   const dispatch = useDispatch();
