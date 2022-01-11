@@ -4,14 +4,14 @@ import { map } from 'lodash';
 import { Container, Slide, ToggleButton, ToggleButtonGroup, useScrollTrigger } from '@mui/material';
 import { CgInfinity } from 'react-icons/cg';
 
-import { selectFilter, setFilter } from 'redux/slices/records';
+import { selectQuerySettings, setFilter } from 'redux/slices/records';
 import { TRAVEL_TYPES } from 'lib/constants';
 import { TravelTypeAppbarStyled, TravelTypeToolbarStyled } from 'components/TravelTypeFilter/styled';
 
 function TravelTypeFilter() {
   const dispatch = useDispatch();
   const trigger = useScrollTrigger();
-  const filter = useSelector(selectFilter);
+  const { filter } = useSelector(selectQuerySettings);
 
   const handleFilterChange = (event, newFilter) => {
     dispatch(setFilter({ filter: newFilter }));
