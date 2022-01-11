@@ -4,13 +4,13 @@ import { map, tail } from 'lodash';
 import haversine from 'haversine';
 import { Box, Grid } from '@mui/material';
 
+import RecordsFetchWrapper from 'components/RecordsContainer/FetchWrapper';
 import RecordCard from 'components/Record/RecordCard';
 import RecordCardSkeleton from 'components/Record/RecordCardSkeleton';
 import { recordsApi } from 'redux/services/recordsService';
 import { selectQuerySettings } from 'redux/slices/records';
 import useRoutes from 'hooks/useRoutes';
 import { HAVERSINE_OPTIONS } from 'lib/constants';
-import RecordsFetchWrapper from 'components/RecordsContainer/FetchWrapper';
 
 const { useRetrieveRecordsQuery } = recordsApi;
 

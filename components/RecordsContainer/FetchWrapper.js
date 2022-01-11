@@ -1,16 +1,11 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { assign, nth, round } from 'lodash';
+import { assign, min, nth, round } from 'lodash';
 import { CircularProgress, Container } from '@mui/material';
 
 import { recordsApi } from 'redux/services/recordsService';
 import { increaseLimit, selectQuerySettings } from 'redux/slices/records';
-import {
-  FetchWrapperBody,
-  FetchWrapperContainer,
-  FetchWrapperFooter,
-  FetchWrapperHeader,
-} from 'components/RecordsContainer/styled';
+import { FetchWrapperFooter, FetchWrapperHeader } from 'components/RecordsContainer/styled';
 
 const { useRetrieveRecordsQuery } = recordsApi;
 
@@ -33,14 +28,16 @@ function FetchWrapper({ children }) {
   const [value, setValue] = useState(0);
 
   const onTouchStart = (e) => {
-    try {
-      if (childrenRef.current?.getBoundingClientRect().top < 0) {
+    if (!isFetching) {
+      try {
+        if (childrenRef.current?.getBoundingClientRect().top < 0) {
+          assign(draggingState, { startY: 0, isDragging: false });
+        } else {
+          assign(draggingState, { startY: e.touches[0].pageY, isDragging: true });
+        }
+      } catch (e) {
         assign(draggingState, { startY: 0, isDragging: false });
-      } else {
-        assign(draggingState, { startY: e.touches[0].pageY, isDragging: true });
       }
-    } catch (e) {
-      assign(draggingState, { startY: 0, isDragging: false });
     }
   };
 
@@ -54,14 +51,13 @@ function FetchWrapper({ children }) {
           e.preventDefault();
         }
 
-        const distanceY = Math.min((draggingY - startY) / resistance, pullDownMaximumValue);
+        const newHeight = min([(draggingY - startY) / resistance, pullDownMaximumValue]);
+        const newValue = min([round(newHeight / pullDownMaximumValue * 100, 0), 100]);
 
-        setHeight(distanceY);
-        setValue(round(distanceY / pullDownMaximumValue * 100, 0));
+        setHeight(newHeight);
+        setValue(newValue);
 
-        if (distanceY >= pullDownThreshold) {
-          assign(draggingState, { thresholdReached: true });
-        }
+        assign(draggingState, { thresholdReached: newHeight >= pullDownThreshold });
       } else {
         assign(draggingState, { startY: 0, isDragging: false });
       }
@@ -93,7 +89,7 @@ function FetchWrapper({ children }) {
       if (isIntersecting && hasMore && !isFetching) {
         dispatch(increaseLimit());
       }
-    }, { threshold: 0, rootMargin: '100px 0px 0px 0px' });
+    }, { threshold: 0, rootMargin: '200px 0px 0px 0px' });
 
     if (element) {
       fetchMoreRef.current.observe(element);
@@ -122,24 +118,22 @@ function FetchWrapper({ children }) {
   }, [isFetching]);
 
   return (
-    <FetchWrapperContainer>
-      <Container disableGutters maxWidth="md">
-        <FetchWrapperHeader height={height} maxHeight={pullDownThreshold}>
-          <CircularProgress
-            size={25}
-            color="inherit"
-            variant={value ? 'determinate' : 'indeterminate'}
-            value={value}
-          />
-        </FetchWrapperHeader>
-        <FetchWrapperBody ref={childrenRef}>
-          {children}
-        </FetchWrapperBody>
-        <FetchWrapperFooter ref={onFetchMore}>
-          {!isLoading && isFetching && <CircularProgress size={25} color="inherit" />}
-        </FetchWrapperFooter>
-      </Container>
-    </FetchWrapperContainer>
+    <Container disableGutters maxWidth="md">
+      <FetchWrapperHeader height={height} maxHeight={pullDownThreshold}>
+        <CircularProgress
+          size={25}
+          color="inherit"
+          variant={value ? 'determinate' : 'indeterminate'}
+          value={value}
+        />
+      </FetchWrapperHeader>
+      <div ref={childrenRef}>
+        {children}
+      </div>
+      <FetchWrapperFooter ref={onFetchMore}>
+        {!isLoading && isFetching && <CircularProgress size={25} color="inherit" />}
+      </FetchWrapperFooter>
+    </Container>
   );
 }
 

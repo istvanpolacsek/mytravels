@@ -7,8 +7,6 @@ const flex = css`
   justify-content: center;
 `;
 
-export const FetchWrapperContainer = styled.div``;
-
 export const FetchWrapperHeader = styled.div`
   ${flex};
   height: ${({ height }) => height}px;
@@ -17,12 +15,10 @@ export const FetchWrapperHeader = styled.div`
   transition: all 0.5s ease-out;
 `;
 
-export const FetchWrapperBody = styled.div``;
-
 export const FetchWrapperFooter = styled.div`
   ${flex};
   height: 80px;
   margin-top: 10px;
   padding-bottom: calc(${({ theme }) => theme.mixins.toolbar.minHeight}px + env(safe-area-inset-bottom, 0) + 10px);
-  transition: all 0.5s ease-out;
+  transition: all 0.5s linear;
 `;
