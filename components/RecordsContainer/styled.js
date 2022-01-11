@@ -14,6 +14,7 @@ export const FetchWrapperHeader = styled.div`
   height: ${({ height }) => height}px;
   visibility: ${({ height }) => height ? 'visible' : 'hidden'};
   opacity: min(${({ height, maxHeight }) => height / maxHeight}, 1);
+  transition: all 0.5s ease-out;
 `;
 
 export const FetchWrapperBody = styled.div``;

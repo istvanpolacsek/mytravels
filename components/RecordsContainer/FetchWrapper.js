@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { assign, nth, round } from 'lodash';
 import { CircularProgress, Container } from '@mui/material';
@@ -25,8 +25,8 @@ function FetchWrapper({ children }) {
   const querySettings = useSelector(selectQuerySettings);
   const { data, isLoading, isFetching, refetch } = useRetrieveRecordsQuery(querySettings);
 
-  const settings = nth(data, 0);
-  const hasMore = settings?.count > querySettings.limit;
+  const settings = useMemo(() => nth(data, 0), [data]);
+  const hasMore = useMemo(() => settings?.count > querySettings.limit, [settings, querySettings]);
 
   const draggingState = { startY: 0, isDragging: false, thresholdReached: false };
   const [height, setHeight] = useState(0);
