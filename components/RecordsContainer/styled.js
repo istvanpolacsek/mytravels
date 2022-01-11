@@ -24,4 +24,5 @@ export const FetchWrapperFooter = styled.div`
   height: 80px;
   margin-top: 10px;
   padding-bottom: calc(${({ theme }) => theme.mixins.toolbar.minHeight}px + env(safe-area-inset-bottom, 0) + 10px);
+  transition: all 0.5s ease-out;
 `;

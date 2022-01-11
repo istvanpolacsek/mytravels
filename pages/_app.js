@@ -5,7 +5,6 @@ import { CssBaseline } from '@mui/material';
 import 'css/styles.css';
 
 import ContextWrapper from 'components/ContextWrapper/ContextWrapper';
-import GlobalLoader from 'components/GlobalLoader/GlobalLoader';
 import ActiveDialog from 'components/ActiveDialog/ActiveDialog';
 
 const clientSideEmotionCache = createCache({ key: 'css' });
@@ -20,7 +19,6 @@ function App({ Component, emotionCache = clientSideEmotionCache, pageProps, sess
       <Script async id="google-maps" strategy="afterInteractive" src={process.env.NEXT_PUBLIC_MAPS_SRC} />
       <ContextWrapper emotionCache={emotionCache} session={session}>
         <CssBaseline />
-        <GlobalLoader />
         <ActiveDialog />
         <Component {...pageProps} />
       </ContextWrapper>
