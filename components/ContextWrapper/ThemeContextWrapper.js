@@ -92,6 +92,19 @@ function ThemeContextWrapper({ children, emotionCache }) {
       MuiTypography: { styleOverrides: { root: { fontWeight: 'lighter' } } },
       MuiButton: { defaultProps: { variant: 'outlined' } },
       MuiLoadingButton: { defaultProps: { variant: 'outlined' } },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            padding: 7,
+            zIndex: theme.zIndex.appBar,
+          },
+          track: {
+            borderRadius: 20,
+            opacity: 0.2,
+
+          },
+        },
+      },
     },
   }));
 

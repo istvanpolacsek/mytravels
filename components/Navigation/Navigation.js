@@ -4,7 +4,7 @@ import { AppBar, Container, Toolbar, Typography } from '@mui/material';
 
 import MobileNavigation from 'components/Navigation/MobileNavigation';
 import TravelTypeFilter from 'components/TravelTypeFilter/TravelTypeFilter';
-import DarkModeSwitch from 'components/DarkModeSwitch/DarkModeSwitch';
+import DarkModeSwitch from 'components/Switches/DarkModeSwitch';
 import DesktopNavigation from 'components/Navigation/DesktopNavigation';
 import StyledLink from 'components/Navigation/StyledLink';
 import { selectIsMobile } from 'redux/slices/settings';
