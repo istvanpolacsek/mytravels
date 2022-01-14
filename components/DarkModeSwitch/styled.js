@@ -1,19 +1,5 @@
 import styled from '@emotion/styled';
-import { Stack, Toolbar } from '@mui/material';
-
-export const ToolbarStyled = styled(Toolbar)`
-  padding-top: env(safe-area-inset-top, 0);
-
-  a {
-    color: inherit;
-    text-decoration: inherit;
-  }
-`;
-
-export const MobileToolbar = styled(Toolbar)`
-  justify-content: space-between;
-  padding-bottom: env(safe-area-inset-bottom, 10px);
-`;
+import { Stack } from '@mui/material';
 
 export const DarkModeSwitchStyled = styled(Stack)`
   .MuiSwitch-root {
