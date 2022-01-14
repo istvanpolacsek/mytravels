@@ -23,7 +23,7 @@ function Home({ isMobile }) {
   return (
     <HomeStyled>
       <Navigation />
-      <TravelTypeFilter />
+      {/* <TravelTypeFilter /> */}
       <RecordsContainer />
     </HomeStyled>
   );

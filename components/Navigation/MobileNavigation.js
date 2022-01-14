@@ -1,21 +1,27 @@
 import { memo } from 'react';
 import { map } from 'lodash';
-import { Container } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, SvgIcon } from '@mui/material';
+import { RiAddCircleLine, RiBarChartLine } from 'react-icons/ri';
 
-import AvatarButton from 'components/Navigation/AvatarButton';
-import ViewStatsButton from 'components/Navigation/ViewStatsButton';
-import AddRecordButton from 'components/Navigation/AddRecordButton';
-import { MobileToolbar } from 'components/Navigation/styled';
-
-const actions = [ViewStatsButton, AddRecordButton, AvatarButton];
+import ComposedLink from 'components/Navigation/ComposedLink';
+import useRoutes from 'hooks/useRoutes';
+import useAvatar from 'hooks/useAvatar';
 
 function MobileNavigation() {
+  const { statsPageQuery, editRecordQuery, profileQuery } = useRoutes();
+  const { component: Avatar, props } = useAvatar();
+
+  const actions = [
+    { icon: <SvgIcon><RiBarChartLine /></SvgIcon>, to: statsPageQuery },
+    { icon: <SvgIcon><RiAddCircleLine /></SvgIcon>, to: editRecordQuery },
+    { icon: <Avatar {...props} />, to: profileQuery },
+  ];
+
   return (
-    <Container disableGutters maxWidth="sm">
-      <MobileToolbar>
-        {map(actions, (Action, i) => <Action key={i} />)}
-      </MobileToolbar>
-    </Container>
+    <BottomNavigation>
+      {map(actions, (props, i) => (
+        <BottomNavigationAction key={i} component={ComposedLink} linkAs="/" shallow={true} {...props} />))}
+    </BottomNavigation>
   );
 }
 

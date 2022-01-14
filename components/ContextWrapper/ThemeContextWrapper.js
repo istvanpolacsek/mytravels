@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { assign } from 'lodash';
 import { CacheProvider } from '@emotion/react';
+import { useScrollTrigger } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { getColorMode, selectIsDarkModeActive } from 'redux/slices/settings';
@@ -17,6 +19,7 @@ export const backgroundDark = '#121212';
 function ThemeContextWrapper({ children, emotionCache }) {
   const dispatch = useDispatch();
   const i = +useSelector(selectIsDarkModeActive);
+  const trigger = useScrollTrigger();
 
   const theme = createTheme({
     mixins: { toolbar: { minHeight: 44 } },
@@ -26,12 +29,43 @@ function ThemeContextWrapper({ children, emotionCache }) {
       secondary: { main: [secondaryLight, secondaryDark][i] },
       divider: [dividerLight, dividerDark][i],
     },
+  });
+
+  assign(theme, createTheme(theme, {
     components: {
       MuiAppBar: {
+        variants: [
+          {
+            props: { variant: 'blur', color: 'transparent' },
+            style: {
+              backdropFilter: 'blur(10px)',
+              backgroundColor: `${[backgroundLight, backgroundDark][i]}BB`,
+              boxShadow: `${[dividerLight, dividerDark][i]} 0px -1px 1px inset`,
+              height: (2 - trigger) * theme.mixins.toolbar.minHeight,
+              transition: `height ${theme.transitions.duration.short}ms ease`,
+            },
+          },
+        ],
+      },
+      MuiToolbar: {
+        variants: [
+          { props: { variant: 'extended' }, style: { paddingTop: 'env(safe-area-inset-top, 0)' } },
+          {
+            props: { variant: 'sticky' },
+            style: {
+              paddingTop: 5,
+              borderTop: `1px solid ${[dividerLight, dividerDark][i]}`,
+              justifyContent: 'space-around',
+            },
+          },
+        ],
+      },
+      MuiBottomNavigation: {
         styleOverrides: {
-          colorTransparent: {
+          root: {
+            paddingBottom: 'env(safe-area-inset-bottom, 0)',
             backdropFilter: 'blur(10px)',
-            boxShadow: `${[dividerLight, dividerDark][i]} 0px -1px 1px inset`,
+            backgroundColor: `${[backgroundLight, backgroundDark][i]}BB`,
           },
         },
       },
@@ -51,17 +85,14 @@ function ThemeContextWrapper({ children, emotionCache }) {
       MuiDialogTitle: { styleOverrides: { root: { padding: '16px 8px' } } },
       MuiDrawer: {
         styleOverrides: {
-          paper: {
-            borderRadius: '10px 10px 0 0',
-            paddingBottom: 'env(safe-area-inset-bottom, 0)',
-          },
+          paper: { borderRadius: '10px 10px 0 0', paddingBottom: 'env(safe-area-inset-bottom, 0)' },
         },
       },
       MuiTypography: { styleOverrides: { root: { fontWeight: 'lighter' } } },
       MuiButton: { defaultProps: { variant: 'outlined' } },
       MuiLoadingButton: { defaultProps: { variant: 'outlined' } },
     },
-  });
+  }));
 
   useEffect(() => {
     dispatch(getColorMode());
