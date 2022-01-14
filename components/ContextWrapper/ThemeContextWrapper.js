@@ -38,7 +38,7 @@ function ThemeContextWrapper({ children, emotionCache }) {
           {
             props: { variant: 'blur', color: 'transparent' },
             style: {
-              paddingTop: 'env(safe-area-inset-top, 0)',
+              marginTop: 'env(safe-area-inset-top, 0)',
               height: (2 - trigger) * theme.mixins.toolbar.minHeight,
               backdropFilter: 'blur(10px)',
               backgroundColor: `${[backgroundLight, backgroundDark][i]}BB`,
