@@ -63,6 +63,7 @@ function ThemeContextWrapper({ children, emotionCache }) {
       MuiBottomNavigation: {
         styleOverrides: {
           root: {
+            height: 'calc(env(safe-area-inset-bottom, 0) + 56px)',
             paddingBottom: 'env(safe-area-inset-bottom, 0)',
             backdropFilter: 'blur(10px)',
             backgroundColor: `${[backgroundLight, backgroundDark][i]}BB`,
