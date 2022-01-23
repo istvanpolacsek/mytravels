@@ -4,7 +4,7 @@ import { Switch } from '@mui/material';
 import { RiMoonLine, RiSunLine } from 'react-icons/ri';
 
 import { selectIsDarkModeActive, toggleColorMode } from 'redux/slices/settings';
-import { DarkModeSwitchStyled } from 'components/Navigation/styled';
+import { DarkModeSwitchStyled } from 'components/Switches/styled';
 
 function DarkModeSwitch() {
   const dispatch = useDispatch();

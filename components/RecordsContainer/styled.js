@@ -1,10 +1,24 @@
 import styled from '@emotion/styled';
-import { Grid } from '@mui/material';
+import { css } from '@emotion/react';
 
-const margin = 10;
+const flex = css`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+`;
 
-export const LoaderItemStyled = styled(Grid)`
-  height: 60px;
-  margin-top: ${margin}px;
-  padding-bottom: calc(${({ theme }) => theme.mixins.toolbar.minHeight}px + env(safe-area-inset-bottom, 0) + ${margin}px);
+export const FetchWrapperHeader = styled.div`
+  ${flex};
+  height: ${({ height }) => height}px;
+  visibility: ${({ height }) => height ? 'visible' : 'hidden'};
+  opacity: min(${({ height, maxHeight }) => height / maxHeight}, 1);
+  transition: all 0.5s ease-out;
+`;
+
+export const FetchWrapperFooter = styled.div`
+  ${flex};
+  height: 80px;
+  margin-top: 10px;
+  padding-bottom: calc(${({ theme }) => theme.mixins.toolbar.minHeight}px + env(safe-area-inset-bottom, 0) + 10px);
+  transition: all 0.5s linear;
 `;
